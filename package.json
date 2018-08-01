@@ -11,7 +11,7 @@
   "author": "Aleš Menzel <alesmenzel@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "test": "node test/index.js"
+    "test": "node examples/index.js"
   },
   "repository": {
     "type": "git",

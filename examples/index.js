@@ -31,23 +31,41 @@ const colorizeByNamespace = namespace => {
   return chalk.hex(`#${hex}`);
 };
 
+const format = info => {
+  const { namespace, level, timestamp, ms, args } = info;
+
+  const namespaceColor = colorizeByNamespace(namespace);
+
+  const time = chalk.gray(`[${timestamp.toISOString()}]`);
+  const nmsp = namespaceColor(namespace);
+  const lvl = colorizeByLevel(level.toUpperCase());
+  const msg = chalk.gray(util.format(...args));
+  const elapsed = namespaceColor(`+${ms}ms`);
+
+  return `${time} ${nmsp} ${lvl} ${msg} ${elapsed}\n`;
+};
+
+const fileFormat = info => {
+  const { namespace, level, timestamp, ms, args } = info;
+
+  const time = `[${timestamp.toISOString()}]`;
+  const nmsp = namespace;
+  const lvl = level.toUpperCase();
+  const msg = util.format(...args);
+  const elapsed = `+${ms}ms`;
+
+  return `${time} ${nmsp} ${lvl} ${msg} ${elapsed}\n`;
+};
+
 // Setup the logger - returns a createLogger function
 const createLogger = churchill({
-  transports: [new churchill.Console({ level: "verbose" })], // Transports - must have a log() function
+  transports: [
+    new churchill.Console({ level: "verbose" }),
+    new churchill.File({ filename: "error.log", level: "error", format: fileFormat }),
+    new churchill.File({ filename: "combined.log", level: "info", format: fileFormat })
+  ], // Transports - must have a log() function
   // Custom formatter function
-  format: info => {
-    const { namespace, level, timestamp, ms, args } = info;
-
-    const namespaceColor = colorizeByNamespace(namespace);
-
-    const time = chalk.gray(`[${timestamp.toISOString()}]`);
-    const nmsp = namespaceColor(namespace);
-    const lvl = colorizeByLevel(level.toUpperCase());
-    const msg = chalk.gray(util.format(...args));
-    const elapsed = namespaceColor(`+${ms}ms`);
-
-    return `${time} ${nmsp} ${lvl} ${msg} ${elapsed}\n`;
-  }
+  format
 });
 
 const loggerA = createLogger("worker:a"); // namespace
@@ -56,4 +74,4 @@ const loggerC = createLogger("worker:c"); // namespace
 
 loggerA.info("test", { metadata: "some info" });
 loggerB.info("test", { metadata: "some info" });
-loggerC.info("test", { metadata: "some info" });
+loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));

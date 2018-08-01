@@ -6,6 +6,7 @@
 // enable certain log level
 
 const Console = require("./transports/console");
+const File = require("./transports/file");
 
 const { CHURCHILL_DEBUG, CHURCHILL_DEBUG_LEVEL } = process.env;
 
@@ -96,5 +97,6 @@ function setupLogger(options) {
 }
 
 setupLogger.Console = Console;
+setupLogger.File = File;
 
 module.exports = setupLogger;
