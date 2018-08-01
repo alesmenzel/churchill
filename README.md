@@ -71,6 +71,10 @@ logger.error("test", { metadata: 'some info' }, new Error("ERR!"));
 //     at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3) +0ms
 ```
 
-This is how it can look like in a terminal:
+This is how it can look like in a terminal
 
 ![](./assets/sample.png)
+
+or this
+
+![](./assets/sample-colorized.png)

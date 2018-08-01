@@ -40,13 +40,13 @@ const createLogger = churchill({
 
     const namespaceColor = colorizeByNamespace(namespace);
 
-    const time = namespaceColor(timestamp.toISOString());
+    const time = chalk.gray(`[${timestamp.toISOString()}]`);
     const nmsp = namespaceColor(namespace);
     const lvl = colorizeByLevel(level.toUpperCase());
-    const msg = namespaceColor(util.format(...args));
+    const msg = chalk.gray(util.format(...args));
     const elapsed = namespaceColor(`+${ms}ms`);
 
-    return `${nmsp} [${time}] ${lvl} ${msg} ${elapsed}\n`;
+    return `${time} ${nmsp} ${lvl} ${msg} ${elapsed}\n`;
   }
 });
 
