@@ -3,6 +3,7 @@
   "rules": {
     "linebreak-style": "off",
     "no-param-reassign": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "no-shadow": "off"
   }
 }

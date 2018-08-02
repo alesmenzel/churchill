@@ -1,8 +1,11 @@
+const format = require("../format");
+
 function Console(opts) {
   this.opts = opts;
+  this.opts.format = this.opts.format || format.toTerminal;
 }
 
-Console.prototype.log = function(output, info) {
+Console.prototype.log = function(info, output) {
   const { priority } = info;
 
   output = this.opts.format ? this.opts.format(info) : output;

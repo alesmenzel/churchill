@@ -7,6 +7,7 @@
 
 const Console = require("./transports/console");
 const File = require("./transports/file");
+const format = require("./format");
 
 const { CHURCHILL_DEBUG, CHURCHILL_DEBUG_LEVEL } = process.env;
 
@@ -49,8 +50,8 @@ function matchNamespace(input) {
 function setupLogger(options) {
   const { format, transports } = options;
 
-  function createLogger(namespace) {
-    const enabled = matchNamespace(namespace);
+  function createLogger(namespace = "") {
+    const enabled = namespace ? matchNamespace(namespace) : true;
 
     function logger(level, ...args) {
       if (!enabled) {
@@ -75,13 +76,13 @@ function setupLogger(options) {
         args
       };
 
-      const output = format(data);
+      const output = format ? format(data) : undefined;
       transports.forEach(transport => {
         if (priority > levels[transport.opts.level]) {
           return;
         }
 
-        transport.log(output, data);
+        transport.log(data, output);
       });
       lastLog = Date.now();
     }
@@ -98,5 +99,6 @@ function setupLogger(options) {
 
 setupLogger.Console = Console;
 setupLogger.File = File;
+setupLogger.format = format;
 
 module.exports = setupLogger;
