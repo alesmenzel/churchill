@@ -2,9 +2,9 @@
 
 Simple to use, without overwhelming configuration NodeJS logging utility. Inspired by [winston](https://github.com/winstonjs/winston) and [debug](https://github.com/visionmedia/debug).
 
-![](./assets/sample-colorized.png)
+![churchill logger](./assets/sample-colorized.png)
 
-## Instalation
+## Installation
 
 ```bash
 npm install @alesmenzel/churchill
