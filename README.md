@@ -7,7 +7,7 @@ Simple to use, without overwhelming configuration NodeJS logging utility. Inspir
 ## Installation
 
 ```bash
-npm install @alesmenzel/churchill
+npm install churchill
 ```
 
 ## Setup
@@ -16,12 +16,14 @@ Setting up Churchill is easy. Simply call churchill with a list of transports an
 with the default formatting, you are done and can start logging!
 
 ```js
+const churchill = require("churchill");
+
 // Setup the logger - returns a createLogger function
 const createLogger = churchill({
   transports: [
-    new churchill.Console(),
-    new churchill.File({ filename: "error.log", level: "error" }),
-    new churchill.File({ filename: "combined.log" })
+    new churchill.trasports.Console(),
+    new churchill.trasports.File({ filename: "error.log", level: "error" }),
+    new churchill.trasports.File({ filename: "combined.log" })
   ]
 });
 ```
@@ -55,6 +57,18 @@ loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));
 //    at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3)
 ```
 
+## Transports
+
+This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage.
+
+| Name     | Description                                 | Example|
+| -------- | ------------------------------------------- |-|
+| Console  | Log to console                              | `new churchill.trasports.Console()` |
+| File     | Log to a file                               | `new churchill.trasports.File({ filename: "error.log", level: "error" })` |
+| Socket   | Log to a socket, note that the implementation uses an internal buffer to store messages before the socket connection is estabilished. This can cause out of memory (OOM) crashes when too many messages are buffered. (It is recommended to set the max. amount of stored messages in the buffer to prevent this, default limit is 100)                            | `new churchill.transports.Socket({ host: "127.0.0.1", port: 1337 })` |
+| Stream | Log to any arbitrary stream. | `new churchill.transports.Stream({ stream: <Stream> })` |
+| HTTP* | (*`Not Implemented Yet`) Log to a HTTP stream. | `new churchill.transports.HTTP({ path: "https://domain.com/path" })` |
+
 ## Logging uncaught exception
 
 Simply add listener for the `uncaughtException` and log whatevet you need.
@@ -85,16 +99,16 @@ throw new Error("ERR!");
 Churchill supports custom formatting functions. A formatting function accepts `info` object which is the logged message and should return value that will be sent to transport streams.
 
 ```js
-const util = require('util');
+const util = require("util");
 
-const customFormat = (info) => {
+const customFormat = info => {
   const { namespace, timestamp, level, ms, args } = info;
 
   return `${namespace} ${level} ${util.format(...args)} +${ms}ms`;
 };
 
 const createLogger = churchill({
-  transports: [new churchill.Console({ format: customFormat })]
+  transports: [new churchill.trasports.Console({ format: customFormat })]
 });
 
 const loggerA = createLogger("worker:a");

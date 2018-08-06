@@ -1,12 +1,4 @@
-// namespaces
-// colors
-// levels
-// MS between logs
-// enable certain namespaces
-// enable certain log level
-
-const Console = require("./transports/console");
-const File = require("./transports/file");
+const transports = require("./transports");
 const format = require("./format");
 
 const { CHURCHILL_DEBUG, CHURCHILL_DEBUG_LEVEL } = process.env;
@@ -14,6 +6,7 @@ const { CHURCHILL_DEBUG, CHURCHILL_DEBUG_LEVEL } = process.env;
 const DEBUG = CHURCHILL_DEBUG;
 const DEBUG_LEVEL = CHURCHILL_DEBUG_LEVEL;
 
+// Default log levels
 const levels = {
   error: 0,
   warn: 1,
@@ -23,9 +16,7 @@ const levels = {
   silly: 5
 };
 
-let lastLog = Date.now();
-
-// Create a list of RegExp matches to test against
+// Create a list of RegExp matches to test against for namespaces
 let namespaces;
 if (DEBUG) {
   namespaces = DEBUG.split(/[\s,]+/).reduce((acc, namespace) => {
@@ -39,6 +30,11 @@ if (DEBUG) {
   }, []);
 }
 
+/**
+ * Namespace matcher
+ *
+ * @param {String} input Namespace
+ */
 function matchNamespace(input) {
   if (!DEBUG) {
     return true;
@@ -47,37 +43,53 @@ function matchNamespace(input) {
   return namespaces.some(namespace => input.match(namespace));
 }
 
+/**
+ * Sets up the churchill logger
+ *
+ * @param {Object} options Options
+ */
 function setupLogger(options) {
-  const { format, transports } = options;
+  const { format, transports, level: globalLevel } = options;
+  let lastLog;
 
   function createLogger(namespace = "") {
     const enabled = namespace ? matchNamespace(namespace) : true;
 
+    /**
+     * The main log function
+     *
+     * @param {String} level Level
+     * @param {Array<*>} args Array of logged variables
+     */
     function logger(level, ...args) {
+      // Check if namespace is enabled
       if (!enabled) {
         return;
       }
 
       const priority = levels[level];
 
+      // Check for global level option
+      if (priority > globalLevel) {
+        return;
+      }
+
+      // Check for global env. variable level option
       if (DEBUG_LEVEL && priority > levels[DEBUG_LEVEL]) {
         return;
       }
 
-      const ms = Date.now() - lastLog;
+      const ms = lastLog ? Date.now() - lastLog : 0;
       const timestamp = new Date();
 
-      const data = {
-        level,
-        priority,
-        ms,
-        timestamp,
-        namespace,
-        args
-      };
+      const data = { level, priority, ms, timestamp, namespace, args };
 
+      // Format the Message if global format function is defined
       const output = format ? format(data) : undefined;
+
+      // Send the Message and formated message to all connected transports
       transports.forEach(transport => {
+        // Check if the transport supports the level
         if (priority > levels[transport.opts.level]) {
           return;
         }
@@ -87,6 +99,9 @@ function setupLogger(options) {
       lastLog = Date.now();
     }
 
+    /**
+     * Shorthand for logging with `logger.info(...)`, etc.
+     */
     Object.keys(levels).forEach(level => {
       logger[level] = (...args) => logger(level, ...args);
     });
@@ -97,8 +112,7 @@ function setupLogger(options) {
   return createLogger;
 }
 
-setupLogger.Console = Console;
-setupLogger.File = File;
+setupLogger.transports = transports;
 setupLogger.format = format;
 
 module.exports = setupLogger;

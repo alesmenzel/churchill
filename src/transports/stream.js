@@ -1,14 +1,16 @@
 const format = require("../format");
 
 /**
- * Synchronous logging to console (stdout/stderr streams)
+ * Synchronous logging to a stream
  *
  * @param {Object} opts Options
  * @param {Function} opts.format Formatting function
+ * @param {Stream} opts.stream Stream
  */
-function Console(opts) {
+function Stream(opts) {
   this.opts = opts;
-  this.opts.format = this.opts.format || format.toTerminal;
+  this.opts.format = this.opts.format || format.toText;
+  this.stream = this.opts.stream;
 }
 
 /**
@@ -17,16 +19,10 @@ function Console(opts) {
  * @param {Object} info Message
  * @param {*} output (Optional) Output of the global formatting function
  */
-Console.prototype.log = function(info, output) {
-  const { priority } = info;
-
+Stream.prototype.log = function(info, output) {
   output = this.opts.format ? this.opts.format(info) : output;
 
-  if (priority === 0) {
-    return process.stderr.write(output);
-  }
-
-  return process.stdout.write(output);
+  this.stream.write(output);
 };
 
-module.exports = Console;
+module.exports = Stream;

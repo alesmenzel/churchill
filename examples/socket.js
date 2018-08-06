@@ -3,16 +3,16 @@
 
 const churchill = require("../src/churchill");
 
-// Setup the logger - returns a createLogger function
-const createLogger = churchill({
-  transports: [
-    new churchill.transports.Console({ level: "verbose" }),
-    new churchill.transports.File({ filename: "error.log", level: "error" }),
-    new churchill.transports.File({ filename: "combined.log", level: "info" })
-  ]
+const socket = new churchill.transports.Socket({ host: "127.0.0.1", port: 1337, queueLimit: 10 });
+
+socket.on("error", err => {
+  console.log("ERR!", err);
 });
 
-const logger = createLogger(); // Global logger - always enabled
+// Setup the logger - returns a createLogger function
+const createLogger = churchill({
+  transports: [socket]
+});
 
 const loggerA = createLogger("worker:a"); // namespace "worker:a"
 const loggerB = createLogger("worker:b"); // namespace "worker:b"
@@ -22,9 +22,8 @@ loggerA.info("test", { metadata: "some info" });
 loggerB.info("test", { metadata: "some info" });
 loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));
 
-process.on("uncaughtException", err => {
-  logger.error(err);
-  process.exit(1);
-});
-
-throw new Error("ERR!");
+let i = 0;
+setInterval(() => {
+  loggerB.info("async", { metadata: i });
+  i += 1;
+}, 500);

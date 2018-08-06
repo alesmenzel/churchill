@@ -10,7 +10,7 @@ const customFormat = info => {
 
 // Setup the logger - returns a createLogger function
 const createLogger = churchill({
-  transports: [new churchill.Console({ format: customFormat })]
+  transports: [new churchill.trasports.Console({ format: customFormat })]
 });
 
 const loggerA = createLogger("worker:a"); // namespace "worker:a"
