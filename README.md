@@ -61,17 +61,17 @@ loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));
 
 This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage.
 
-| Name     | Description                                 | Example|
-| -------- | ------------------------------------------- |-|
-| Console  | Log to console                              | `new churchill.trasports.Console()` |
-| File     | Log to a file                               | `new churchill.trasports.File({ filename: "error.log", level: "error" })` |
-| Socket   | Log to a socket, note that the implementation uses an internal buffer to store messages before the socket connection is estabilished. This can cause out of memory (OOM) crashes when too many messages are buffered. (It is recommended to set the max. amount of stored messages in the buffer to prevent this, default limit is 100)                            | `new churchill.transports.Socket({ host: "127.0.0.1", port: 1337 })` |
-| Stream | Log to any arbitrary stream. | `new churchill.transports.Stream({ stream: <Stream> })` |
-| HTTP* | (*`Not Implemented Yet`) Log to a HTTP stream. | `new churchill.transports.HTTP({ path: "https://domain.com/path" })` |
+| Name    | Description                                                                                                                                                                                                                                                                                                                             | Example                                                                   |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Console | Log to console                                                                                                                                                                                                                                                                                                                          | `new churchill.trasports.Console()`                                       |
+| File    | Log to a file                                                                                                                                                                                                                                                                                                                           | `new churchill.trasports.File({ filename: "error.log", level: "error" })` |
+| Socket  | Log to a socket, note that the implementation uses an internal buffer to store messages before the socket connection is estabilished. This can cause out of memory (OOM) crashes when too many messages are buffered. (It is recommended to set the max. amount of stored messages in the buffer to prevent this, default limit is 100) | `new churchill.transports.Socket({ host: "127.0.0.1", port: 1337 })`      |
+| Stream  | Log to any arbitrary stream.                                                                                                                                                                                                                                                                                                            | `new churchill.transports.Stream({ stream: <Stream> })`                   |
+| HTTP\*  | (\*`Not Implemented Yet`) Log to a HTTP stream.                                                                                                                                                                                                                                                                                         | `new churchill.transports.HTTP({ path: "https://domain.com/path" })`      |
 
 ## Logging uncaught exception
 
-Simply add listener for the `uncaughtException` and log whatevet you need.
+Simply add listener for the `uncaughtException` and log whatever you need.
 
 ```js
 const logger = createLogger(); // Global logger - always enabled
@@ -83,7 +83,7 @@ process.on("uncaughtException", err => {
 
 throw new Error("ERR!");
 // [2018-08-02T21:07:51.549Z] ERROR Error: ERR!
-//    at Object.<anonymous> (C:\Projects\churchill\examples\setup.js:30:7)
+//    at Object.<anonymous> (<path>:30:7)
 //    at Module._compile (internal/modules/cjs/loader.js:689:30)
 //    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
 //    at Module.load (internal/modules/cjs/loader.js:599:32)
@@ -145,7 +145,7 @@ logger.warn("test", { metadata: "some info" });
 // [2018-08-01T19:46:47.582Z] namespace:test WARN test { metadata: 'some info' } +0ms
 logger.error("test", { metadata: "some info" }, new Error("ERR!"));
 // [2018-08-01T19:46:47.582Z] namespace:test ERROR test { metadata: 'some info' } Error: ERR!
-//     at Object.<anonymous> (C:\Projects\churchill\test\index.js:37:32)
+//     at Object.<anonymous> (<path>:37:32)
 //     at Module._compile (internal/modules/cjs/loader.js:689:30)
 //     at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
 //     at Module.load (internal/modules/cjs/loader.js:599:32)

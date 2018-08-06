@@ -6,6 +6,7 @@ const churchill = require("../src/churchill");
 const socket = new churchill.transports.Socket({ host: "127.0.0.1", port: 1337, queueLimit: 10 });
 
 socket.on("error", err => {
+  // eslint-disable-next-line
   console.log("ERR!", err);
 });
 
