@@ -6,4 +6,4 @@
 - Add more unit tests - test formatting, transports
 - HTTP streaming support
 - Add a table of contents
-
+- Update examples/outputs in README
