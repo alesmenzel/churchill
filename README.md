@@ -7,8 +7,25 @@ Simple to use, without overwhelming configuration NodeJS logging utility. Inspir
 ## Installation
 
 ```bash
-npm install churchill
+npm install @alesmenzel/churchill
 ```
+
+## Table of contents
+
+* [Setup](#setup)
+* [Usage](#usage)
+* [Transports](#transports)
+  * [Console](#console)
+  * [File](#console)
+  * [Stream](#stream)
+  * [Socket](#socket)
+  * [HTTP](#http)
+* [Customization](#customization)
+  * [Custom Logging Levels](#custom-log-levels)
+  * [Custom Formats](#creating-custom-formats)
+  * [Custom Transport](#custom-transport)
+* [Environmental Variables](#environmental-variables)
+* [Handling Uncaught Exceptions with winston](#logging-uncaught-exceptions)
 
 ## Setup
 
@@ -57,6 +74,19 @@ loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));
 //    at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3)
 ```
 
+The default log levels contiain 6 levels, that are ascending numerical values, where the lower the number the more important the log message is.
+
+```js
+const levels = {
+  error: 0,
+  warn: 1,
+  info: 2, // Default minimum log level
+  verbose: 3,
+  debug: 4,
+  silly: 5
+};
+```
+
 ## Transports
 
 This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage.
@@ -69,32 +99,43 @@ This is the list of currently supported transports. Check the [examples](./examp
 | Stream  | Log to any arbitrary stream.                                                                                                                                                                                                                                                                                                            | `new churchill.transports.Stream({ stream: <Stream> })`                   |
 | HTTP\*  | (\*`Not Implemented Yet`) Log to a HTTP stream.                                                                                                                                                                                                                                                                                         | `new churchill.transports.HTTP({ path: "https://domain.com/path" })`      |
 
-## Logging uncaught exception
+### Console
 
-Simply add listener for the `uncaughtException` and log whatever you need.
+### File
+
+### Stream
+
+### Socket
+
+### HTTP
+
+## Customization
+
+### Custom Log Levels
+
+You can also specify custom levels.
 
 ```js
-const logger = createLogger(); // Global logger - always enabled
+const customLevels = {
+  critical: 0,
+  warning: 1,
+  log: 2,
+  debug: 3
+};
 
-process.on("uncaughtException", err => {
-  logger.error(err);
-  process.exit(1);
-});
+const customColors = {
+  critical: 'red',
+  warning: 'orange',
+  log: 'blue',
+  debug: 'gray'
+};
 
-throw new Error("ERR!");
-// [2018-08-02T21:07:51.549Z] ERROR Error: ERR!
-//    at Object.<anonymous> (<path>:30:7)
-//    at Module._compile (internal/modules/cjs/loader.js:689:30)
-//    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
-//    at Module.load (internal/modules/cjs/loader.js:599:32)
-//    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
-//    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
-//    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
-//    at startup (internal/bootstrap/node.js:266:19)
-//    at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3) +0ms
+churchill({ levels: customLevels, colors: customColors });
 ```
 
-## Custom formats
+Available colors are `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `gray`, `redBright`, `greenBright`, `yellowBright`, `blueBright`, `magentaBright`, `cyanBright`, `whiteBright`. For more information check the [chalk](https://www.npmjs.com/package/chalk) package.
+
+### Custom Formats
 
 Churchill supports custom formatting functions. A formatting function accepts `info` object which is the logged message and should return value that will be sent to transport streams.
 
@@ -123,7 +164,33 @@ loggerC.error("test", { metadata: "some info" });
 // worker:c error test { metadata: 'some info' } +0ms
 ```
 
-## Enviromental variables
+### Custom transport
+
+A transport is a function with a log method. Log method accepts `info` and `output`, where info is the object with logged message and output is formatted message by the global format function. See [implementation](./src/transports) of transports for examples.
+
+```js
+class CustomTransport {
+  constructor(opts) {
+    super();
+
+    this.opts = opts;
+  }
+
+  /**
+   * Log a Message
+   *
+   * @param {Object} info Message
+   * @param {*} output (Optional) Output of the global formatting function
+   */
+  log(info, output) {
+    process.stdout.write(output); // Log to console
+  }
+}
+
+module.exports = CustomTransport;
+```
+
+## Environmental Variables
 
 You can change the funcionality of the logger by setting enviromental variables.
 
@@ -155,6 +222,45 @@ logger.error("test", { metadata: "some info" }, new Error("ERR!"));
 //     at startup (internal/bootstrap/node.js:266:19)
 //     at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3) +0ms
 ```
+
+## Logging Uncaught Exceptions
+
+Simply add listener for the `uncaughtException` and log whatever you need.
+
+```js
+const logger = createLogger(); // Global logger - always enabled
+
+process.on("uncaughtException", err => {
+  logger.error(err);
+  process.exit(1);
+});
+
+throw new Error("ERR!");
+// [2018-08-02T21:07:51.549Z] ERROR Error: ERR!
+//    at Object.<anonymous> (<path>:30:7)
+//    at Module._compile (internal/modules/cjs/loader.js:689:30)
+//    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
+//    at Module.load (internal/modules/cjs/loader.js:599:32)
+//    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
+//    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
+//    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
+//    at startup (internal/bootstrap/node.js:266:19)
+//    at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3) +0ms
+```
+
+## Contributors
+
+Help us improve and be recognised!
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars3.githubusercontent.com/u/8976542?v=4" width="100px;"/><br /><sub><b>Aleš Menzel</b></sub>](https://github.com/alesmenzel)<br />[💻](https://github.com/alesmenzel/churchill/commits?author=alesmenzel "Code") [📖](https://github.com/alesmenzel/churchill/commits?author=alesmenzel "Documentation") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+<!-- ALL-CONTRIBUTORS-LIST: START - Do not remove or modify this section -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!
 
 ## License
 

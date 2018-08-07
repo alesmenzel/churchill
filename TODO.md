@@ -5,5 +5,5 @@
 - Add documentation regarding every transport (how to use, options) + link to example
 - Add more unit tests - test formatting, transports
 - HTTP streaming support
-- Add a table of contents
 - Update examples/outputs in README
+- TLS Socket

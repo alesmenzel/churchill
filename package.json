@@ -1,17 +1,21 @@
 {
   "name": "churchill",
   "version": "0.1.0",
-  "description": "",
+  "description": "Node logging utility",
   "keywords": [
     "logger",
     "node",
     "utility"
   ],
   "license": "MIT",
-  "author": "Aleš Menzel <alesmenzel@gmail.com>",
+  "contributors": [
+    "Aleš Menzel <alesmenzel@gmail.com>"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "node examples/index.js"
+    "test": "mocha **/*.spec.js",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
   },
   "repository": {
     "type": "git",
@@ -22,6 +26,7 @@
     "supports-color": "^5.4.0"
   },
   "devDependencies": {
+    "all-contributors-cli": "^5.4.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-prettier": "^2.9.0",
