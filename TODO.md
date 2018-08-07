@@ -7,3 +7,4 @@
 - HTTP streaming support
 - Update examples/outputs in README
 - TLS Socket
+- Support negative search in CHURCHILL_DEBUG (i.e. `-something*`)
