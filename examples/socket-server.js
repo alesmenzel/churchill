@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const net = require("net");
 
 const server = net.createServer(socket => {
@@ -16,3 +17,6 @@ server.listen(1337, "127.0.0.1");
 server.on("error", err => {
   console.error("server:", err);
 });
+
+// Connect from CLI
+// nc localhost 1337
