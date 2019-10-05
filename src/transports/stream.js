@@ -1,28 +1,48 @@
-const format = require("../format");
+const Transport = require("../transport");
+const defaultFormat = require("../format");
 
 /**
- * Synchronous logging to a stream
- *
- * @param {Object} opts Options
- * @param {Function} opts.format Formatting function
- * @param {Stream} opts.stream Stream
+ * @typedef {import("stream").Writable} Writable
  */
-function Stream(opts) {
-  this.opts = opts;
-  this.opts.format = this.opts.format || format.toText;
-  this.stream = this.opts.stream;
+
+class Stream extends Transport {
+  /**
+   * Synchronous logging to a stream
+   * @param {Object} opts Options
+   * @param {Function} [opts.format] Formatting function
+   * @param {String} [opts.maxLevel] Max logging level
+   * @param {Writable} opts.stream Stream
+   */
+  constructor(opts) {
+    super({ ...opts, format: opts.format || defaultFormat.toText });
+    const { stream } = opts;
+    if (!stream) {
+      throw new Error("You must provide a stream, did you forget to pass options.stream?");
+    }
+    this.stream = stream;
+  }
+
+  /**
+   * Log a Message
+   * @param {Object} info Message
+   * @param {*} output (Optional) Output of the global formatting function
+   */
+  log(info, output) {
+    output = this.format(info, output);
+    // TODO: handle backpressure
+    return this.stream.write(output);
+  }
 }
 
 /**
- * Log a Message
- *
- * @param {Object} info Message
- * @param {*} output (Optional) Output of the global formatting function
+ * Create a stream transport
+ * @param {Object} opts Options
+ * @param {Function} [opts.format] Formatting function
+ * @param {String} [opts.maxLevel] Max logging level
+ * @param {Writable} opts.stream Stream
  */
-Stream.prototype.log = function(info, output) {
-  output = this.opts.format ? this.opts.format(info) : output;
-
-  this.stream.write(output);
+Stream.create = opts => {
+  return new Stream(opts);
 };
 
 module.exports = Stream;

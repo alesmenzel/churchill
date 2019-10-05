@@ -1,22 +1,35 @@
 // process.env.CHURCHILL_DEBUG = "worker:a:*"; // Log only namespaces matching worker:a:*
 // process.env.CHURCHILL_DEBUG_LEVEL = "debug"; // Log only verbose and above
 
+const fs = require("fs");
 const churchill = require("../src/churchill");
 
+const { Console, File, HTTP, Stream } = churchill.transports;
+
 // Setup the logger - returns a createLogger function
-const createLogger = churchill({
+const createNamespace = churchill({
   transports: [
-    new churchill.transports.Console({ level: "verbose" }),
-    new churchill.transports.File({ filename: "error.log", level: "error" }),
-    new churchill.transports.File({ filename: "combined.log", level: "info" })
+    Console.create({ maxLevel: "verbose" }),
+    File.create({ filename: "error.log", maxLevel: "error" }),
+    File.create({ filename: "combined.log", maxLevel: "info" }),
+    HTTP.create({
+      method: "PUT",
+      url: "https://log.example.com",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      auth: { username: "abc", password: "xxx" },
+      makeRequest: (info, output) => ({ body: output })
+    }),
+    Stream.create({ stream: fs.createWriteStream("stream.log") })
   ]
 });
 
-const logger = createLogger(); // Global logger - always enabled
+const logger = createNamespace(); // Global logger - always enabled
 
-const loggerA = createLogger("worker:a"); // namespace "worker:a"
-const loggerB = createLogger("worker:b"); // namespace "worker:b"
-const loggerC = createLogger("worker:c"); // namespace "worker:c"
+const loggerA = createNamespace("worker:a"); // namespace "worker:a"
+const loggerB = createNamespace("worker:b"); // namespace "worker:b"
+const loggerC = createNamespace("worker:c"); // namespace "worker:c"
 
 loggerA.info("test", { metadata: "some info" });
 loggerB.info("test", { metadata: "some info" });

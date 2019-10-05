@@ -57,7 +57,7 @@ const toText = info => {
   const time = `[${timestamp.toISOString()}]`;
   const nmsp = namespace ? ` ${namespace}` : "";
   const lvl = ` ${level.toUpperCase()}`;
-  const msg = ` ${util.format(...args)}`;
+  const msg = args.length ? ` ${util.format(...args)}` : "";
   const elapsed = ` +${ms}ms`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
@@ -82,7 +82,7 @@ const toTerminal = info => {
   const time = chalk.gray(`[${timestamp.toISOString()}]`);
   const nmsp = namespace ? ` ${namespaceColor(namespace)}` : "";
   const lvl = ` ${levelColor(level.toUpperCase())}`;
-  const msg = ` ${chalk.gray(util.format(...args))}`;
+  const msg = args.length ? ` ${chalk.gray(util.format(...args))}`: "";
   const elapsed = ` ${namespaceColor(`+${ms}ms`)}`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
