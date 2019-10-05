@@ -10,7 +10,7 @@ const Logger = require("./logger");
  * @param {Array<Object>} [options.transports] Transports
  * @param {Number} [options.maxLevel] Max logged level
  */
-function churchill(options = {}) {
+function churchill(options) {
   /**
    * Create a namespace
    * @param {String} [namespace] Namespace

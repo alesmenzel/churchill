@@ -1,4 +1,4 @@
-const request = require("request");
+const request = require("request-promise-native");
 
 const Transport = require("../transport");
 
@@ -6,22 +6,19 @@ class HTTP extends Transport {
   /**
    * HTTP Transport
    * @param {Object} opts Options
+   * @param {Function} [opts.format] Formatting function
+   * @param {String} [opts.maxLevel] Max logging level
    * @param {String} opts.method Method
    * @param {String} opts.url URL
    * @param {Object} [opts.auth] Auth
    * @param {Object} [opts.headers] Headers
-   * @param {Function} opts.makeRequest Headers
-   * @param {Function} [opts.format] Formatting function
-   * @param {String} [opts.maxLevel] Max logging level
+   * @param {String} [opts.dataKey="json"] Data key (e.g. body, qs, json, form, formData)
    */
   constructor(opts) {
-    super(opts);
-    const { method, url, auth, headers, makeRequest } = opts;
-    this.method = method;
-    this.url = url;
-    this.auth = auth;
-    this.headers = headers;
-    this.makeRequest = makeRequest;
+    const { format, maxLevel, dataKey = "json", ...rest } = opts;
+    super({ format, maxLevel });
+    this.dataKey = dataKey;
+    this.requestOptions = rest;
   }
 
   /**
@@ -29,29 +26,33 @@ class HTTP extends Transport {
    * @param {Object} info Message
    * @param {*} [output] Output of the global formatting function
    */
-  log(info, output) {
+  async log(info, output) {
     const out = this.format(info, output);
-    const { method, url, auth, headers, makeRequest } = this;
-    return request({
-      method,
-      url,
-      headers,
-      auth,
-      ...makeRequest(out)
-    });
+    const { dataKey, requestOptions } = this;
+    let res;
+    try {
+      res = await request({
+        [dataKey]: out,
+        ...requestOptions
+      });
+    } catch (err) {
+      this.emit("error", err);
+      return null;
+    }
+    return res;
   }
 }
 
 /**
  * HTTP Transport
  * @param {Object} opts Options
+ * @param {Function} [opts.format] Formatting function
+ * @param {String} [opts.maxLevel] Max logging level
  * @param {String} opts.method Method
  * @param {String} opts.url URL
  * @param {Object} [opts.auth] Auth
  * @param {Object} [opts.headers] Headers
- * @param {Function} opts.makeRequest Headers
- * @param {Function} [opts.format] Formatting function
- * @param {String} [opts.maxLevel] Max logging level
+ * @param {String} [opts.dataKey] Data key (e.g. body, qs, json, form, formData)
  */
 HTTP.create = opts => {
   return new HTTP(opts);

@@ -67,7 +67,7 @@ class Logger {
       const maxLevel = transport.getMaxLevel();
       const maxPriority = levels[maxLevel];
       if (isset(maxLevel) && isset(maxPriority) && priority > maxPriority) return;
-      transport.log(data, output);
+      transport.log(data, output, this);
     });
     this.lastLogTimestamp = Date.now();
   }

@@ -25,10 +25,16 @@ if (CHURCHILL_DEBUG !== undefined) {
   }, []);
 }
 
+const E_BACKPRESSURE =
+  "WARNING: [Backpressure]: your logging destination buffer is full and messages will be lost, this usually means that your logging destination cannot keep up or is too slow";
+const E_NOT_IMPLEMENTED = "log(info, output, logger) must be implemented by the child class";
+
 module.exports = {
   LEVELS,
   DEBUG,
   DEBUG_LEVEL,
   DEBUG_SEPARATOR,
-  DEBUG_NAMESPACES
+  DEBUG_NAMESPACES,
+  E_BACKPRESSURE,
+  E_NOT_IMPLEMENTED
 };

@@ -1,11 +1,13 @@
 /* eslint-disable class-methods-use-this, no-unused-vars */
+const EventEmitter = require("events");
+const { E_NOT_IMPLEMENTED } = require("./config");
 const { isset } = require("./utils");
 
 /**
  * @typedef {import("./logger")} Logger
  */
 
-class Transport {
+class Transport extends EventEmitter {
   /**
    * Create a Transport
    * @param {Object} [options] Options
@@ -13,6 +15,7 @@ class Transport {
    * @param {String} [options.maxLevel] Max logging level
    */
   constructor(options = {}) {
+    super();
     this.options = options;
   }
 
@@ -40,7 +43,7 @@ class Transport {
    * @param {Logger} logger Logger
    */
   log(info, output, logger) {
-    throw new Error("log(info, output) must be implemented by the child class");
+    this.emit("error", new Error(E_NOT_IMPLEMENTED));
   }
 }
 

@@ -2,6 +2,8 @@ const fs = require("fs");
 
 const Transport = require("../transport");
 const defaultFormat = require("../format");
+const { LogError } = require("../errors");
+const { E_BACKPRESSURE } = require("../config");
 
 class File extends Transport {
   /**
@@ -16,6 +18,14 @@ class File extends Transport {
     const { filename } = opts;
     this.filename = filename;
     this.stream = fs.createWriteStream(filename, { flags: "a" });
+
+    this.writable = true;
+    this.stream.on("error", err => {
+      this.emit("error", err);
+    });
+    this.stream.on("drain", () => {
+      this.writable = true;
+    });
   }
 
   /**
@@ -24,9 +34,16 @@ class File extends Transport {
    * @param {*} [output] Output of the global formatting function
    */
   log(info, output) {
-    output = this.format(info, output);
-    // TODO: handle backpressure
-    return this.stream.write(output);
+    const out = this.format(info, output);
+    // stream buffer is full
+    if (!this.writable) {
+      this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
+      return;
+    }
+    const canWrite = this.stream.write(out);
+    if (!canWrite) {
+      this.writable = false;
+    }
   }
 }
 

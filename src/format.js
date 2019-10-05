@@ -18,7 +18,6 @@ const colors = {
 
 /**
  * Creates an MD5 hash from string input
- *
  * @param {String} str Input
  */
 const md5 = str =>
@@ -30,7 +29,6 @@ const md5 = str =>
 /**
  * Colorize based on log level
  * (Based on predefined color scheme)
- *
  * @param {*} level
  * @returns {Function} Colorize function
  */
@@ -38,12 +36,11 @@ const colorizeByLevel = level => chalk[colors[level.toLowerCase()]];
 
 /**
  * Colorize based on namespace
- * (Uses double md5 hash for randomness and takes the first 6 characters)
- *
+ * (Uses md5 hash for randomness and takes the first 6 characters)
  * @param {String} namespace Namespace
  * @returns {Function} Colorize function
  */
-const colorizeByNamespace = namespace => chalk.hex(`#${md5(md5(namespace)).slice(0, 6)}`);
+const colorizeByNamespace = namespace => chalk.hex(`#${md5(namespace).slice(0, 6)}`);
 
 /**
  * Formats log message for a plain text output
@@ -54,7 +51,7 @@ const colorizeByNamespace = namespace => chalk.hex(`#${md5(md5(namespace)).slice
 const toText = info => {
   const { namespace = "", level = "", timestamp, ms, args } = info;
 
-  const time = `[${timestamp.toISOString()}]`;
+  const time = `[${new Date(timestamp).toISOString()}]`;
   const nmsp = namespace ? ` ${namespace}` : "";
   const lvl = ` ${level.toUpperCase()}`;
   const msg = args.length ? ` ${util.format(...args)}` : "";
@@ -79,10 +76,10 @@ const toTerminal = info => {
   const namespaceColor = namespace ? colorizeByNamespace(namespace) : i => i;
   const levelColor = colorizeByLevel(level);
 
-  const time = chalk.gray(`[${timestamp.toISOString()}]`);
+  const time = chalk.gray(`[${new Date(timestamp).toISOString()}]`);
   const nmsp = namespace ? ` ${namespaceColor(namespace)}` : "";
   const lvl = ` ${levelColor(level.toUpperCase())}`;
-  const msg = args.length ? ` ${chalk.gray(util.format(...args))}`: "";
+  const msg = args.length ? ` ${chalk.gray(util.format(...args))}` : "";
   const elapsed = ` ${namespaceColor(`+${ms}ms`)}`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;

@@ -13,13 +13,9 @@ const createNamespace = churchill({
     File.create({ filename: "error.log", maxLevel: "error" }),
     File.create({ filename: "combined.log", maxLevel: "info" }),
     HTTP.create({
-      method: "PUT",
-      url: "https://log.example.com",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      auth: { username: "abc", password: "xxx" },
-      makeRequest: (info, output) => ({ body: output })
+      method: "POST",
+      url: "https://postman-echo.com/post",
+      format: info => ({ ...info, http: true })
     }),
     Stream.create({ stream: fs.createWriteStream("stream.log") })
   ]
@@ -35,9 +31,8 @@ loggerA.info("test", { metadata: "some info" });
 loggerB.info("test", { metadata: "some info" });
 loggerC.error("test", { metadata: "some info" }, new Error("ERR!"));
 
-process.on("uncaughtException", err => {
-  logger.error(err);
-  process.exit(1);
-});
+// process.on("uncaughtException", err => {
+//   logger.error(err);
+// });
 
-throw new Error("ERR!");
+// throw new Error("ERR!");
