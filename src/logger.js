@@ -1,4 +1,4 @@
-const { LEVELS, DEBUG_LEVEL } = require("./config");
+const { LEVELS, COLORS, DEBUG_LEVEL } = require("./config");
 const { isset, isNamespaceEnabled } = require("./utils");
 
 /**
@@ -11,15 +11,24 @@ class Logger {
    * Create a Logger
    * @param {Object} [options] Options
    * @param {Object<String,Number>} [options.levels=LEVELS] Log levels hashtable
+   * @param {Object<String,String>} [options.colors=COLORS] Log level colors hashtable
    * @param {String} [options.namespace] Namespace id
    * @param {Number} [options.maxLevel] Max log level
    * @param {Array<Transport>} [options.transports=[]] Transports to send the logs
    * @param {Function} [options.format] Log formatter function
    */
   constructor(options = {}) {
-    const { levels = LEVELS, namespace, maxLevel, transports = [], format } = options;
+    const {
+      levels = LEVELS,
+      colors = COLORS,
+      namespace,
+      maxLevel,
+      transports = [],
+      format
+    } = options;
     this.enabled = isset(namespace) ? isNamespaceEnabled(namespace) : true;
     this.levels = levels;
+    this.colors = colors;
     this.maxLevel = maxLevel;
     this.namespace = namespace;
     this.transports = transports;
@@ -91,9 +100,10 @@ class Logger {
  * Create a Logger
  * @param {Object} [options] Options
  * @param {Object<String,Number>} [options.levels] Log levels hashtable
+ * @param {Object<String,String>} [options.colors] Log level colors hashtable
  * @param {String} [options.namespace] Namespace id
  * @param {Number} [options.maxLevel] Max log level
- * @param {Array<Transport>} [options.transports=[]] Transports to send the logs
+ * @param {Array<Transport>} [options.transports] Transports to send the logs
  * @param {Function} [options.format] Log formatter function
  */
 Logger.createLogger = options => {

@@ -47,7 +47,7 @@ class Console extends Transport {
    * @param {Logger} logger Logger
    */
   log(info, output, logger) {
-    const out = this.format(info, output);
+    const out = this.format(info, output, logger);
     const { errorLevel: errorLevels } = this;
 
     const { priority } = info;

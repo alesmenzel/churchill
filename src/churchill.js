@@ -1,6 +1,7 @@
 const transports = require("./transports");
 const format = require("./format");
 const Logger = require("./logger");
+const Transport = require("./transport");
 
 /**
  * Sets up the churchill logger
@@ -26,5 +27,6 @@ churchill.Logger = Logger;
 churchill.createLogger = Logger.createLogger;
 churchill.format = format;
 churchill.transports = transports;
+churchill.Transport = Transport;
 
 module.exports = churchill;

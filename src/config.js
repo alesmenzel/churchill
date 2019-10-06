@@ -10,6 +10,16 @@ const LEVELS = {
   silly: 5
 };
 
+// Default color scheme
+const COLORS = {
+  error: "red",
+  warn: "yellow",
+  info: "blue",
+  verbose: "cyan",
+  debug: "green",
+  silly: "white"
+};
+
 const DEBUG = CHURCHILL_DEBUG;
 const DEBUG_LEVEL = CHURCHILL_DEBUG_LEVEL;
 const DEBUG_SEPARATOR = /[\s,]+/;
@@ -31,6 +41,7 @@ const E_NOT_IMPLEMENTED = "log(info, output, logger) must be implemented by the 
 
 module.exports = {
   LEVELS,
+  COLORS,
   DEBUG,
   DEBUG_LEVEL,
   DEBUG_SEPARATOR,

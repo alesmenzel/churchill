@@ -1,8 +1,11 @@
 const Transport = require("../transport");
 const defaultFormat = require("../format");
+const { LogError } = require("../errors");
+const { E_BACKPRESSURE } = require("../config");
 
 /**
  * @typedef {import("stream").Writable} Writable
+ * @typedef {import("../logger")} Logger
  */
 
 class Stream extends Transport {
@@ -19,18 +22,32 @@ class Stream extends Transport {
     if (!stream) {
       throw new Error("You must provide a stream, did you forget to pass options.stream?");
     }
+    this.writable = true;
     this.stream = stream;
+    this.stream.on("error", err => {
+      this.emit("error", err);
+    });
+    this.stream.on("drain", () => {
+      this.writable = true;
+    });
   }
 
   /**
    * Log a Message
    * @param {Object} info Message
    * @param {*} output (Optional) Output of the global formatting function
+   * @param {Logger} logger Logger
    */
-  log(info, output) {
-    output = this.format(info, output);
-    // TODO: handle backpressure
-    return this.stream.write(output);
+  log(info, output, logger) {
+    const out = this.format(info, output, logger);
+    if (!this.writable) {
+      this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
+      return;
+    }
+    const canWrite = this.stream.write(out);
+    if (!canWrite) {
+      this.writable = false;
+    }
   }
 }
 

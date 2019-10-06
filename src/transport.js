@@ -30,10 +30,11 @@ class Transport extends EventEmitter {
    * Format the log message
    * @param {Object} info Info
    * @param {*} [output] Formatted info by global formatter
+   * @param {Logger} logger Logger
    */
-  format(info, output) {
+  format(info, output, logger) {
     const { format } = this.options;
-    return isset(format) ? format(info, output) : output;
+    return isset(format) ? format(info, output, logger) : output;
   }
 
   /**

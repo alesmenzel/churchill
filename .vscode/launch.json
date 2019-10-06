@@ -7,8 +7,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test",
-      "program": "${workspaceFolder}/examples/socket.js"
+      "name": "Example: Console",
+      "program": "${workspaceFolder}/examples/console.js"
     }
   ]
 }

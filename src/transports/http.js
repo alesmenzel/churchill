@@ -2,6 +2,10 @@ const request = require("request-promise-native");
 
 const Transport = require("../transport");
 
+/**
+ * @typedef {import("../logger")} Logger
+ */
+
 class HTTP extends Transport {
   /**
    * HTTP Transport
@@ -25,9 +29,10 @@ class HTTP extends Transport {
    * Log a Message
    * @param {Object} info Message
    * @param {*} [output] Output of the global formatting function
+   * @param {Logger} logger Logger
    */
-  async log(info, output) {
-    const out = this.format(info, output);
+  async log(info, output, logger) {
+    const out = this.format(info, output, logger);
     const { dataKey, requestOptions } = this;
     let res;
     try {

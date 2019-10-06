@@ -1,50 +1,38 @@
 const chalk = require("chalk");
-const crypto = require("crypto");
-const supportsColor = require("supports-color");
 const util = require("util");
-
-// Check if terminal supports at least basic color
-const color = supportsColor.stdout && supportsColor.stderr;
-
-// Default color scheme
-const colors = {
-  error: "red",
-  warn: "yellow",
-  info: "blue",
-  verbose: "cyan",
-  debug: "green",
-  silly: "white"
-};
+const { identity, randomStableColor } = require("./utils");
 
 /**
- * Creates an MD5 hash from string input
- * @param {String} str Input
+ * @typedef {import("./logger")} Logger
  */
-const md5 = str =>
-  crypto
-    .createHash("md5")
-    .update(str)
-    .digest("hex");
 
 /**
  * Colorize based on log level
  * (Based on predefined color scheme)
- * @param {*} level
+ * @param {Object<String,String>} colors
+ * @param {String} level
  * @returns {Function} Colorize function
  */
-const colorizeByLevel = level => chalk[colors[level.toLowerCase()]];
+function colorizeByLevel(colors, level) {
+  // @ts-ignore: chalk
+  return chalk.bold[colors[level]];
+}
 
 /**
  * Colorize based on namespace
- * (Uses md5 hash for randomness and takes the first 6 characters)
- * @param {String} namespace Namespace
+ * (Uses double md5 hash for randomness and takes the first 6 characters)
+ * @param {String} [namespace] Namespace
  * @returns {Function} Colorize function
  */
-const colorizeByNamespace = namespace => chalk.hex(`#${md5(namespace).slice(0, 6)}`);
+function colorizeByNamespace(namespace) {
+  if (!namespace) return identity;
+  const { r, g, b } = randomStableColor(namespace);
+  // @ts-ignore: chalk
+  return chalk.bold.rgb(r, g, b);
+}
 
 /**
  * Formats log message for a plain text output
- *
  * @param {Object} info Log message
  * @returns {String} Text representation of the logged message
  */
@@ -54,6 +42,7 @@ const toText = info => {
   const time = `[${new Date(timestamp).toISOString()}]`;
   const nmsp = namespace ? ` ${namespace}` : "";
   const lvl = ` ${level.toUpperCase()}`;
+  // @ts-ignore: args > 1
   const msg = args.length ? ` ${util.format(...args)}` : "";
   const elapsed = ` +${ms}ms`;
 
@@ -62,32 +51,27 @@ const toText = info => {
 
 /**
  * Formats log message for a terminal output
- *
  * @param {Object} info Log message
+ * @param {*} [output] Output of the global formatting function
+ * @param {Logger} logger Logger
  * @returns {String} Text representation of the logged message
  */
-const toTerminal = info => {
-  if (!color) {
-    return toText(info);
-  }
-
-  const { namespace = "", level = "", timestamp, ms, args } = info;
-
-  const namespaceColor = namespace ? colorizeByNamespace(namespace) : i => i;
-  const levelColor = colorizeByLevel(level);
-
+const toTerminal = (info, output, logger) => {
+  const { namespace, level, timestamp, ms, args } = info;
+  const colorizeNamespace = colorizeByNamespace(namespace);
+  const colorizeLevel = colorizeByLevel(logger.colors, level);
+  // @ts-ignore: chalk
   const time = chalk.gray(`[${new Date(timestamp).toISOString()}]`);
-  const nmsp = namespace ? ` ${namespaceColor(namespace)}` : "";
-  const lvl = ` ${levelColor(level.toUpperCase())}`;
+  const nmsp = namespace ? ` ${colorizeNamespace(namespace)}` : "";
+  const lvl = ` ${colorizeLevel(level.toUpperCase())}`;
+  // @ts-ignore: chalk, args > 1
   const msg = args.length ? ` ${chalk.gray(util.format(...args))}` : "";
-  const elapsed = ` ${namespaceColor(`+${ms}ms`)}`;
+  const elapsed = ` ${colorizeNamespace(`+${ms}ms`)}`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
 };
 
 module.exports = {
-  colorizeByLevel,
-  colorizeByNamespace,
   toText,
   toTerminal
 };
