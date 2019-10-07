@@ -1,0 +1,3 @@
+describe("console", () => {
+  it("acceptance");
+});

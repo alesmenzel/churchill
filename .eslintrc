@@ -1,5 +1,11 @@
 {
-  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "extends": [
+    "airbnb",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "jest": true,
+  },
   "rules": {
     "linebreak-style": "off",
     "no-param-reassign": "off",

@@ -13,7 +13,7 @@ class Logger {
    * @param {Object<String,Number>} [options.levels=LEVELS] Log levels hashtable
    * @param {Object<String,String>} [options.colors=COLORS] Log level colors hashtable
    * @param {String} [options.namespace] Namespace id
-   * @param {Number} [options.maxLevel] Max log level
+   * @param {String} [options.maxLevel] Max log level
    * @param {Array<Transport>} [options.transports=[]] Transports to send the logs
    * @param {Function} [options.format] Log formatter function
    */
@@ -58,7 +58,8 @@ class Logger {
     if (!enabled) return;
     const priority = levels[level];
     // Check for max log level option
-    if (priority > maxLevel) return;
+    const maxPriority = levels[maxLevel];
+    if (maxPriority && priority > maxLevel) return;
     // Check for max global env. variable level option
     const globalMaxLevel = levels[DEBUG_LEVEL];
     if (isset(DEBUG_LEVEL) && isset(globalMaxLevel) && priority > globalMaxLevel) return;
@@ -102,7 +103,7 @@ class Logger {
  * @param {Object<String,Number>} [options.levels] Log levels hashtable
  * @param {Object<String,String>} [options.colors] Log level colors hashtable
  * @param {String} [options.namespace] Namespace id
- * @param {Number} [options.maxLevel] Max log level
+ * @param {String} [options.maxLevel] Max log level
  * @param {Array<Transport>} [options.transports] Transports to send the logs
  * @param {Function} [options.format] Log formatter function
  */

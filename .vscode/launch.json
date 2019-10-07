@@ -9,6 +9,34 @@
       "request": "launch",
       "name": "Example: Console",
       "program": "${workspaceFolder}/examples/console.js"
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test: Unit",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      "args": [
+        "--runInBand",
+        "--config=${workspaceFolder}/jest.config.unit.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test: Acceptance",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      "args": [
+        "--runInBand",
+        "--config=${workspaceFolder}/jest.config.acceptance.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "sourceMaps": true
+    },
   ]
 }
