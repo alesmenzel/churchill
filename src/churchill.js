@@ -6,10 +6,11 @@ const Transport = require("./transport");
 /**
  * Sets up the churchill logger
  * @param {Object} [options] Options
+ * @param {Object<String,Number>} [options.levels] Log levels hashtable
+ * @param {Object<String,String>} [options.colors] Log level colors hashtable
  * @param {Function} [options.format] Formatting function
- * @param {Object} [options.levels] Levels
  * @param {Array<Object>} [options.transports] Transports
- * @param {Number} [options.maxLevel] Max logged level
+ * @param {String} [options.maxLevel] Max logged level
  */
 function churchill(options) {
   /**

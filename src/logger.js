@@ -1,5 +1,6 @@
 const { LEVELS, COLORS, DEBUG_LEVEL } = require("./config");
 const { isset, isNamespaceEnabled } = require("./utils");
+const { Console } = require("./transports");
 
 /**
  * @typedef {import("./transport")} Transport
@@ -14,7 +15,7 @@ class Logger {
    * @param {Object<String,String>} [options.colors=COLORS] Log level colors hashtable
    * @param {String} [options.namespace] Namespace id
    * @param {String} [options.maxLevel] Max log level
-   * @param {Array<Transport>} [options.transports=[]] Transports to send the logs
+   * @param {Array<Transport>} [options.transports=[Console]] Transports to send the logs
    * @param {Function} [options.format] Log formatter function
    */
   constructor(options = {}) {
@@ -23,7 +24,7 @@ class Logger {
       colors = COLORS,
       namespace,
       maxLevel,
-      transports = [],
+      transports = [Console.create({ maxLevel: "info", errorLevel: "error" })],
       format
     } = options;
     this.enabled = isset(namespace) ? isNamespaceEnabled(namespace) : true;
@@ -69,7 +70,7 @@ class Logger {
     const data = { level, priority, ms, timestamp, namespace, args };
 
     // Format the message if global format function is defined
-    const output = isset(format) && format(data);
+    const output = isset(format) ? format(data) : data;
 
     // Send the Message and formated message to all connected transports
     transports.forEach(transport => {

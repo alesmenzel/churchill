@@ -82,7 +82,7 @@ class Console extends Transport {
  * @param {Object} [opts] Options
  * @param {Function} [opts.format] Formatting function
  * @param {String} [opts.maxLevel] Max log level
- * @param {String} [opts.errorLevels] Max log level to stream to stderr
+ * @param {String} [opts.errorLevel] Max log level to stream to stderr
  */
 Console.create = opts => {
   return new Console(opts);
