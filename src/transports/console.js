@@ -62,6 +62,7 @@ class Console extends Transport {
       if (!canWrite) {
         this.stderrWritable = false;
       }
+      require("fs").writeFileSync("a.json", out);
       return null;
     }
 

@@ -15,10 +15,7 @@
       "request": "launch",
       "name": "Test: Unit",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      "args": [
-        "--runInBand",
-        "--config=${workspaceFolder}/jest.config.unit.js"
-      ],
+      "args": ["--runInBand", "--config=${workspaceFolder}/jest.config.unit.js"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
@@ -31,12 +28,14 @@
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       "args": [
         "--runInBand",
-        "--config=${workspaceFolder}/jest.config.acceptance.js"
+        "--config=${workspaceFolder}/jest.config.acceptance.js",
+        "http",
+        "--pattern='logs error message in both transports'"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
       "sourceMaps": true
-    },
+    }
   ]
 }

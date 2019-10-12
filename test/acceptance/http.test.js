@@ -188,11 +188,14 @@ describe("HTTP", () => {
       handleRequests(http, handler);
       await logger.error("{LOG}", { data: "12345" });
 
-      const CALLS = handler.mock.calls.map(([req]) => ({
-        method: req.method,
-        url: req.url,
-        body: req.body
-      }));
+      const CALLS = handler.mock.calls
+        .map(([req]) => ({
+          method: req.method,
+          url: req.url,
+          body: req.body
+        }))
+        // The events are dispatched concurrently and can arrive in any order
+        .sort((a, b) => a.url.localeCompare(b.url));
       const EXPECTATION = [
         {
           method: "POST",
