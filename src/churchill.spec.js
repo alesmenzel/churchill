@@ -24,4 +24,18 @@ describe("churchill", () => {
   it("Transport is exported", () => {
     expect(typeof churchill.Transport).toBe("function");
   });
+
+  it("LEVELS is exported", () => {
+    expect(typeof churchill.LEVELS).toBe("object");
+  });
+
+  it("COLORS is exported", () => {
+    expect(typeof churchill.COLORS).toBe("object");
+  });
+
+  ["ERROR", "WARN", "INFO", "VERBOSE", "DEBUG", "SILLY"].forEach(LEVEL => {
+    it("COLORS is exported", () => {
+      expect(typeof churchill[LEVEL]).toBe("string");
+    });
+  });
 });

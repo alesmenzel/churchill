@@ -42,15 +42,15 @@ describe("isNamespaceEnabled", () => {
 
   xit("return true when enabled", () => {
     // TODO: figure out a way to mock the config module
-    config.DEBUG = "namespace:a*,namespace:b";
-    config.DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
+    config.CHURCHILL_DEBUG = "namespace:a*,namespace:b";
+    config.CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
     expect(isNamespaceEnabled("namespace:a")).toBe(true);
   });
 
   xit("return false when not enabled", () => {
     // TODO: figure out a way to mock the config module
-    config.DEBUG = "namespace:a*,namespace:b";
-    config.DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
+    config.CHURCHILL_DEBUG = "namespace:a*,namespace:b";
+    config.CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
     expect(isNamespaceEnabled("namespace:b:one")).toBe(false);
   });
 });

@@ -38,17 +38,18 @@ class File extends Transport {
    * @param {*} [output] Output of the global formatting function
    * @param {Logger} logger Logger
    */
-  log(info, output, logger) {
+  async log(info, output, logger) {
     const out = this.format(info, output, logger);
     // stream buffer is full
     if (!this.writable) {
       this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
-      return;
+      return null;
     }
     const canWrite = this.stream.write(out);
     if (!canWrite) {
       this.writable = false;
     }
+    return null;
   }
 }
 

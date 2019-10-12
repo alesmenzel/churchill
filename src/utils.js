@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 
-const { DEBUG, DEBUG_NAMESPACES } = require("./config");
+const { CHURCHILL_DEBUG, CHURCHILL_DEBUG_NAMESPACES } = require("./config");
 
 /**
  * Identity function
@@ -23,8 +23,8 @@ function isset(value) {
  * @param {String} input Namespace
  */
 function isNamespaceEnabled(input) {
-  if (!isset(DEBUG)) return true;
-  return DEBUG_NAMESPACES.some(namespace => input.match(namespace));
+  if (!isset(CHURCHILL_DEBUG)) return true;
+  return CHURCHILL_DEBUG_NAMESPACES.some(namespace => input.match(namespace));
 }
 
 /**

@@ -15,7 +15,7 @@
   "scripts": {
     "test": "run-s lint test:unit test:acceptance",
     "test:unit": "jest --config jest.config.unit.js",
-    "test:acceptance": "jest --config jest.config.acceptance.js",
+    "test:acceptance": "jest --runInBand --config jest.config.acceptance.js",
     "lint": "eslint ./src",
     "format": "eslint --fix ./src",
     "contributors:add": "all-contributors add",

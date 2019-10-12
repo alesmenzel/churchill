@@ -1,4 +1,4 @@
-const { LEVELS, COLORS, DEBUG_LEVEL } = require("./config");
+const { LEVELS, COLORS, CHURCHILL_DEBUG_LEVEL, ERROR, INFO } = require("./config");
 const { isset, isNamespaceEnabled } = require("./utils");
 const { Console } = require("./transports");
 
@@ -14,7 +14,7 @@ class Logger {
    * @param {Object<String,Number>} [options.levels=LEVELS] Log levels hashtable
    * @param {Object<String,String>} [options.colors=COLORS] Log level colors hashtable
    * @param {String} [options.namespace] Namespace id
-   * @param {String} [options.maxLevel] Max log level
+   * @param {String} [options.maxLevel=INFO] Max log level
    * @param {Array<Transport>} [options.transports=[Console]] Transports to send the logs
    * @param {Function} [options.format] Log formatter function
    */
@@ -23,8 +23,8 @@ class Logger {
       levels = LEVELS,
       colors = COLORS,
       namespace,
-      maxLevel,
-      transports = [Console.create({ maxLevel: "info", errorLevel: "error" })],
+      maxLevel = INFO,
+      transports = [Console.create({ maxLevel: INFO, errorLevel: ERROR })],
       format
     } = options;
     this.enabled = isset(namespace) ? isNamespaceEnabled(namespace) : true;
@@ -53,17 +53,19 @@ class Logger {
    * @param {String} level Level
    * @param {Array<*>} [args] Array of logged variables
    */
-  log(level, ...args) {
+  async log(level, ...args) {
     const { enabled, levels, namespace, maxLevel, transports, format } = this;
     // Check if namespace is enabled
-    if (!enabled) return;
+    if (!enabled) return null;
     const priority = levels[level];
     // Check for max log level option
     const maxPriority = levels[maxLevel];
-    if (maxPriority && priority > maxLevel) return;
+    if (isset(maxPriority) && priority > maxPriority) return null;
     // Check for max global env. variable level option
-    const globalMaxLevel = levels[DEBUG_LEVEL];
-    if (isset(DEBUG_LEVEL) && isset(globalMaxLevel) && priority > globalMaxLevel) return;
+    const globalMaxLevel = levels[CHURCHILL_DEBUG_LEVEL];
+    if (isset(CHURCHILL_DEBUG_LEVEL) && isset(globalMaxLevel) && priority > globalMaxLevel) {
+      return null;
+    }
 
     const timestamp = Date.now();
     const ms = this.lastLogTimestamp ? timestamp - this.lastLogTimestamp : 0;
@@ -73,14 +75,17 @@ class Logger {
     const output = isset(format) ? format(data) : data;
 
     // Send the Message and formated message to all connected transports
-    transports.forEach(transport => {
+    const promises = transports.map(transport => {
       // TODO: possible move this logic to transport itself (?)
       const maxLevel = transport.getMaxLevel();
-      const maxPriority = levels[maxLevel];
-      if (isset(maxLevel) && isset(maxPriority) && priority > maxPriority) return;
-      transport.log(data, output, this);
+      if (isset(maxLevel)) {
+        const maxPriority = levels[maxLevel];
+        if (isset(maxPriority) && priority > maxPriority) return null;
+      }
+      return transport.log(data, output, this);
     });
     this.lastLogTimestamp = Date.now();
+    return Promise.all(promises);
   }
 
   /**

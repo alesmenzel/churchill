@@ -2,6 +2,7 @@ const transports = require("./transports");
 const format = require("./format");
 const Logger = require("./logger");
 const Transport = require("./transport");
+const { LEVELS, COLORS, ERROR, WARN, INFO, VERBOSE, DEBUG, SILLY } = require("./config");
 
 /**
  * Sets up the churchill logger
@@ -29,5 +30,13 @@ churchill.createLogger = Logger.createLogger;
 churchill.format = format;
 churchill.transports = transports;
 churchill.Transport = Transport;
+churchill.LEVELS = LEVELS;
+churchill.COLORS = COLORS;
+churchill.ERROR = ERROR;
+churchill.WARN = WARN;
+churchill.INFO = INFO;
+churchill.VERBOSE = VERBOSE;
+churchill.DEBUG = DEBUG;
+churchill.SILLY = SILLY;
 
 module.exports = churchill;

@@ -46,7 +46,7 @@ class Console extends Transport {
    * @param {*} [output] Output of the global formatting function
    * @param {Logger} logger Logger
    */
-  log(info, output, logger) {
+  async log(info, output, logger) {
     const out = this.format(info, output, logger);
     const { errorLevel: errorLevels } = this;
 
@@ -56,24 +56,25 @@ class Console extends Transport {
       // stream buffer is full
       if (!this.stderrWritable) {
         this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
-        return;
+        return null;
       }
       const canWrite = this.stderr.write(out);
       if (!canWrite) {
         this.stderrWritable = false;
       }
-      return;
+      return null;
     }
 
     // stream buffer is full
     if (!this.stdoutWritable) {
       this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
-      return;
+      return null;
     }
     const canWrite = this.stdout.write(out);
     if (!canWrite) {
       this.stdoutWritable = false;
     }
+    return null;
   }
 }
 
