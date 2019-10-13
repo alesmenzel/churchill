@@ -77,3 +77,37 @@ typings/
 
 # Temp
 temp/
+
+# Ignore unit tests
+**/*.spec.js
+
+# Ignore acceptance tests
+test/
+**/*.test.js
+jest.config.acceptance.js
+jest.config.unit.js
+
+# Assets
+assets/
+
+# Examples
+examples/
+
+# nvmrc
+.nvmrc
+
+# Lint / format
+.eslintrc
+.prettierrc
+
+# Contributors
+.all-contributorsrc
+
+# Code of conduct
+CODE_OF_CONDUCT.md
+
+# TODOs
+TODO.md
+
+# VS Code configuration
+.vscode/
