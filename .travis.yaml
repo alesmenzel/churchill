@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "12"
+cache: npm
+
+services:
+  - elasticsearch
+
+before_script:
+  # This is recommended to ensure elastic is started
+  - sleep 10
+
+notifications:
+email:
+  recipients:
+    - alesmenzel@gmail.com
+  on_success: change
+  on_failure: always
