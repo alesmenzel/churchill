@@ -26,14 +26,14 @@
     "url": "git://github.com/alesmenzel/churchill.git"
   },
   "engines": {
-    "node": "^12.0.0"
+    "node": "^12.12.0",
+    "npm": "^6.11.3"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.4.0",
     "chalk": "^2.4.2",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "supports-color": "^7.1.0"
+    "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",

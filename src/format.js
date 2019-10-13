@@ -71,7 +71,23 @@ const toTerminal = (info, output, logger) => {
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
 };
 
+/**
+ * Formats log message for a elasticsearch
+ * @param {Object} info
+ */
+const toElastic = info => {
+  const { namespace = "", level, timestamp, args } = info;
+  return {
+    level,
+    namespace,
+    timestamp,
+    // @ts-ignore: args > 1
+    message: args.length ? util.inspect(...args) : ""
+  };
+};
+
 module.exports = {
   toText,
-  toTerminal
+  toTerminal,
+  toElastic
 };

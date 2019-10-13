@@ -26,12 +26,7 @@
       "request": "launch",
       "name": "Test: Acceptance",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      "args": [
-        "--runInBand",
-        "--config=${workspaceFolder}/jest.config.acceptance.js",
-        "http",
-        "--pattern='logs error message in both transports'"
-      ],
+      "args": ["--runInBand", "--config=${workspaceFolder}/jest.config.acceptance.js"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,

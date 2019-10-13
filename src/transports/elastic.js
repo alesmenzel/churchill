@@ -1,5 +1,6 @@
 const { Client } = require("@elastic/elasticsearch");
 
+const { toElastic } = require("../format");
 const Transport = require("../transport");
 
 /**
@@ -11,14 +12,14 @@ class Elastic extends Transport {
   /**
    * Logging to Elasticsearch index
    * @param {Object} opts Options
-   * @param {Function} [opts.format] Formatting function
+   * @param {Function} [opts.format=toElastic] Formatting function
    * @param {String} [opts.maxLevel] Max logging level
    * @param {ElasticClient} [opts.client] Elastic client
    * @param {String} [opts.node] Elastic node URL
    * @param {String} opts.index Index
    */
   constructor(opts) {
-    super({ ...opts, format: opts.format });
+    super({ ...opts, format: opts.format || toElastic });
     const { client, index, node } = opts;
 
     if (!client) {

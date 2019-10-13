@@ -45,11 +45,18 @@ class File extends Transport {
       this.emit("error", new LogError(E_BACKPRESSURE, { info, out }));
       return null;
     }
-    const canWrite = this.stream.write(out);
-    if (!canWrite) {
-      this.writable = false;
-    }
-    return null;
+    return new Promise((resolve, reject) => {
+      const canWrite = this.stream.write(out, err => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      });
+      if (!canWrite) {
+        this.writable = false;
+      }
+    });
   }
 }
 
