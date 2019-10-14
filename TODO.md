@@ -1,4 +1,11 @@
-# TODO for 1.0.0-alpha.2
+# TODO
+
+## TODO for 1.0.0-alpha.1
+
+- Update readme to reflect the current API
+- Add examples (?)
+
+## TODO for 1.0.0-alpha.2
 
 - Socket/TLS Socket
 - Support negative search in CHURCHILL_DEBUG (i.e. `-something*`)
