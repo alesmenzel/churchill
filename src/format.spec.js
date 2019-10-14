@@ -16,7 +16,7 @@ describe("format", () => {
       const output = "sample output";
       const logger = Logger.createLogger();
       expect(format.toTerminal(info, output, logger)).toBe(
-        `\u001B[90m[${DATE}]\u001B[39m \u001B[1m[38;2;255;51;129mnamespace:a\u001B[39m\u001B[22m \u001B[1m\u001B[34mINFO\u001B[39m\u001B[22m \u001B[90m{ some: 'data' }\u001B[39m \u001B[1m[38;2;255;51;129m+235ms\u001B[39m\u001B[22m\n`
+        `\u001B[90m[${DATE}]\u001B[39m \u001B[1m[38;2;255;51;129mnamespace:a\u001B[39m\u001B[22m \u001B[1m\u001B[34mINFO\u001B[39m\u001B[22m \u001B[90m{ some: 'data' }\u001B[39m \u001B[1m[38;2;255;51;129m+235ms\u001B[39m\u001B[22m\n`
       );
     });
   });
@@ -47,7 +47,7 @@ describe("format", () => {
         level: info.level,
         namespace: info.namespace,
         timestamp: info.timestamp,
-        message: "{ some: 'data' }, 'second message'"
+        message: "{ some: 'data' } 'second message'"
       });
     });
 

@@ -56,13 +56,13 @@ describe("elastic", () => {
     expect(logs).toEqual([
       {
         level: "error",
-        message: "'{LOG}'",
+        message: "{LOG} { data: '12345' }",
         namespace: "{NAMESPACE}",
         timestamp: TIMESTAMP
       },
       {
         level: "info",
-        message: "'{LOG}'",
+        message: "{LOG} { data: '12345' }",
         namespace: "{NAMESPACE}",
         timestamp: TIMESTAMP
       }

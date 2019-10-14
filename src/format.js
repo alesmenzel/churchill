@@ -8,7 +8,14 @@ const { identity, randomStableColor } = require("./utils");
  */
 function stringify(args) {
   if (!args.length) return "";
-  return args.map(arg => util.inspect(arg)).join(", ");
+  return args
+    .map(arg => {
+      if (typeof arg === "string") {
+        return arg;
+      }
+      return util.inspect(arg);
+    })
+    .join(" ");
 }
 
 /**

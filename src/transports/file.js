@@ -58,6 +58,19 @@ class File extends Transport {
       }
     });
   }
+
+  async end() {
+    return new Promise((resolve, reject) => {
+      this.stream.end(err => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve();
+      });
+    });
+  }
 }
 
 /**
