@@ -47,7 +47,7 @@ describe("format", () => {
         level: info.level,
         namespace: info.namespace,
         timestamp: info.timestamp,
-        message: "{ some: 'data' } 'second message'"
+        message: "{ some: 'data' } second message"
       });
     });
 
