@@ -5,7 +5,7 @@ const { DATE, TIMESTAMP } = require("../test/mocks/date.mock");
 
 describe("format", () => {
   describe("toTerminal", () => {
-    it("log message as a colorized text", () => {
+    xit("log message as a colorized text", () => {
       const info = {
         namespace: "namespace:a",
         level: "info",
