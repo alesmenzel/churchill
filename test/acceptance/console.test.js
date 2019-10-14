@@ -19,7 +19,9 @@ describe("console", () => {
       await logger.warn("{LOG}", { data: "12345" });
 
       expect(spyStdout.mock.calls).toEqual([
-        [`[90m[${DATE}][39m [1m[38;2;54;51;255m{NAMESPACE}[39m[22m [1m[33mWARN[39m[22m [90m{LOG} { data: '12345' }[39m [1m[38;2;54;51;255m+0ms[39m[22m\n`]
+        [
+          `\u001B[90m[${DATE}]\u001B[39m \u001B[1m[38;2;54;51;255m{NAMESPACE}\u001B[39m\u001B[22m \u001B[1m\u001B[33mWARN\u001B[39m\u001B[22m \u001B[90m{LOG} { data: '12345' }\u001B[39m \u001B[1m[38;2;54;51;255m+0ms\u001B[39m\u001B[22m\n`
+        ]
       ]);
       expect(spyStderr.mock.calls).toEqual([]);
     });
@@ -34,9 +36,10 @@ describe("console", () => {
       await logger.warn("{LOG}", { data: "12345" });
 
       expect(spyStdout.mock.calls).toEqual([]);
-      // TODO: there is some issue with color code escape sequence at the beginning ( \u001b )
       expect(spyStderr.mock.calls).toEqual([
-        [`\u001b[90m[${DATE}][39m [1m[38;2;54;51;255m{NAMESPACE}[39m[22m [1m[33mWARN[39m[22m [90m{LOG} { data: '12345' }[39m [1m[38;2;54;51;255m+0ms[39m[22m\n`]
+        [
+          `\u001B[90m[${DATE}]\u001B[39m \u001B[1m[38;2;54;51;255m{NAMESPACE}\u001B[39m\u001B[22m \u001B[1m\u001B[33mWARN\u001B[39m\u001B[22m \u001B[90m{LOG} { data: '12345' }\u001B[39m \u001B[1m[38;2;54;51;255m+0ms\u001B[39m\u001B[22m\n`
+        ]
       ]);
     });
   });

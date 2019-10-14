@@ -3,6 +3,15 @@ const util = require("util");
 const { identity, randomStableColor } = require("./utils");
 
 /**
+ * Stringify args
+ * @param {Array} args
+ */
+function stringify(args) {
+  if (!args.length) return "";
+  return args.map(arg => util.inspect(arg)).join(", ");
+}
+
+/**
  * @typedef {import("./logger")} Logger
  */
 
@@ -42,8 +51,7 @@ const toText = info => {
   const time = `[${new Date(timestamp).toISOString()}]`;
   const nmsp = namespace ? ` ${namespace}` : "";
   const lvl = ` ${level.toUpperCase()}`;
-  // @ts-ignore: args > 1
-  const msg = args.length ? ` ${util.format(...args)}` : "";
+  const msg = args.length ? ` ${stringify(args)}` : "";
   const elapsed = ` +${ms}ms`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
@@ -64,8 +72,8 @@ const toTerminal = (info, output, logger) => {
   const time = chalk.gray(`[${new Date(timestamp).toISOString()}]`);
   const nmsp = namespace ? ` ${colorizeNamespace(namespace)}` : "";
   const lvl = ` ${colorizeLevel(level.toUpperCase())}`;
-  // @ts-ignore: chalk, args > 1
-  const msg = args.length ? ` ${chalk.gray(util.format(...args))}` : "";
+  // @ts-ignore: chalk, args > 0
+  const msg = args.length ? ` ${chalk.gray(stringify(args))}` : "";
   const elapsed = ` ${colorizeNamespace(`+${ms}ms`)}`;
 
   return `${time}${nmsp}${lvl}${msg}${elapsed}\n`;
@@ -81,8 +89,8 @@ const toElastic = info => {
     level,
     namespace,
     timestamp,
-    // @ts-ignore: args > 1
-    message: args.length ? util.inspect(...args) : ""
+    // @ts-ignore: args > 0
+    message: stringify(args)
   };
 };
 

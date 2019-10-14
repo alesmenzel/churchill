@@ -1,6 +1,11 @@
+// @ts-nocheck
 const Logger = require("./logger");
 const Transport = require("./transport");
 const { Console } = require("./transports");
+const { mockDate, TIMESTAMP } = require("../test/mocks/date.mock");
+
+// eslint-disable-next-line no-global-assign
+Date = mockDate();
 
 describe("logger", () => {
   it("create new Logger", () => {
@@ -54,8 +59,6 @@ describe("logger", () => {
   });
 
   it("log messages with custom levels", () => {
-    Date.now = jest.fn(() => 1570394838496);
-
     const mockTransport = new Transport();
     mockTransport.log = jest.fn();
 
@@ -89,7 +92,7 @@ describe("logger", () => {
     const info1 = {
       level: "lvl1",
       namespace: "namespace",
-      timestamp: 1570394838496,
+      timestamp: TIMESTAMP,
       priority: 1,
       ms: 0,
       args: [{ some: "data" }]
@@ -98,32 +101,15 @@ describe("logger", () => {
     const info2 = {
       level: "lvl2",
       namespace: "namespace",
-      timestamp: 1570394838496,
+      timestamp: TIMESTAMP,
       priority: 2,
       ms: 0,
       args: ["some message"]
     };
 
-    const info3 = {
-      level: "lvl3",
-      namespace: "namespace",
-      timestamp: 1570394838496,
-      priority: 3,
-      ms: 0,
-      args: ["msg", new Error("ERR")]
-    };
-
     // @ts-ignore
-    expect(mockTransport.log.mock.calls).toEqual([
-      [info1, info1, logger],
-      [info2, info2, logger],
-      [info3, info3, logger]
-    ]);
+    expect(mockTransport.log.mock.calls).toEqual([[info1, info1, logger], [info2, info2, logger]]);
     // @ts-ignore
-    expect(mockTransport2.log.mock.calls).toEqual([
-      [info1, info1, logger],
-      [info2, info2, logger],
-      [info3, info3, logger]
-    ]);
+    expect(mockTransport2.log.mock.calls).toEqual([[info1, info1, logger], [info2, info2, logger]]);
   });
 });
