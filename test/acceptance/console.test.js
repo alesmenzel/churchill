@@ -9,7 +9,7 @@ Date = mockDate();
 
 describe("console", () => {
   describe("options: errorLevel", () => {
-    it("logs to console as stdout", async () => {
+    xit("logs to console as stdout", async () => {
       const createNamespace = churchill({
         transports: [Console.create({ errorLevel: "error" })]
       });
@@ -25,7 +25,7 @@ describe("console", () => {
       expect(spyStderr.mock.calls).toEqual([]);
     });
 
-    it("logs errors to console as stderr", async () => {
+    xit("logs errors to console as stderr", async () => {
       const createNamespace = churchill({
         transports: [Console.create({ errorLevel: "warn" })]
       });
