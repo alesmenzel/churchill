@@ -1,6 +1,6 @@
-# Churchill (Work in Progress) 🚧
+# Churchill
 
-Simple to use, without overwhelming configuration NodeJS logging utility. Inspired by [winston](https://github.com/winstonjs/winston) and [debug](https://github.com/visionmedia/debug).
+Simple to use (no overwhelming configuration) NodeJS logging utility. Inspired by [winston](https://github.com/winstonjs/winston) and [debug](https://github.com/visionmedia/debug).
 
 ![churchill logger](./assets/sample-colorized.png)
 
@@ -10,13 +10,12 @@ Simple to use, without overwhelming configuration NodeJS logging utility. Inspir
 npm install @alesmenzel/churchill
 ```
 
-## Table of contents
+## Quick links
 
-- [Churchill (Work in Progress) 🚧](#churchill-work-in-progress-%f0%9f%9a%a7)
+- [Churchill](#churchill)
   - [Installation](#installation)
-  - [Table of contents](#table-of-contents)
+  - [Quick links](#quick-links)
   - [Setup](#setup)
-  - [Usage](#usage)
   - [Transports](#transports)
     - [Console](#console)
     - [File](#file)
@@ -35,80 +34,41 @@ npm install @alesmenzel/churchill
 ## Setup
 
 Setting up Churchill is easy. Simply call churchill with a list of transports and if you are happy
-with the default formatting, you can create a namespace and start logging!
+with the default formatting, you can use the logger in your services.
 
 ```js
+// logger.js
 const churchill = require("churchill");
 
-// Setup the logger - returns a createLogger function
+const { Console, File } = churchill.trasports
+
 const createNamespace = churchill({
   transports: [
-    new churchill.trasports.Console(),
-    new churchill.trasports.File({ filename: "error.log", maxLevel: "error" }),
-    new churchill.trasports.File({ filename: "combined.log" })
+    Console.create(),
+    File.create({ filename: "error.log", maxLevel: "error" }),
+    File.create({ filename: "combined.log" })
   ]
 });
-
-
-// Alternatively, if you you create the logger directly
-const logger = churchill.createLogger({
-  transports: [
-    new churchill.trasports.Console(),
-    new churchill.trasports.File({ filename: "error.log", maxLevel: "error" }),
-    new churchill.trasports.File({ filename: "combined.log" })
-  ],
-  namespace: "worker:a"
-})
 ```
 
-## Usage
-
-Once you setup the logger, you can start creating your namespaced loggers and start logging.
+Here is an example service:
 
 ```js
-
-// Global logger without a namespace (always enabled)
-const logger = createNamespace();
-
-logger.info("Global log message", { metadata: "no namespace" });
-// [2019-10-06T13:04:54.022Z] INFO Global log message { metadata: 'no namespace' } +0ms
-logger.warn("Global warning log message");
-// [2019-10-06T13:04:54.025Z] WARN Global warning log message +0ms
-
-
-// File worker-a.js
-const loggerWorkerA = createNamespace("worker:a"); // namespace "worker:a"
-loggerWorkerA.info("Log from A", { name: "Worker A", data: "Data for A" });
-// [2019-10-06T13:04:54.026Z] worker:a INFO Log from A { name: 'Worker A', data: 'Data for A' } +0ms
-
-
-// File worker-b.js
-const loggerWorkerB = createNamespace("worker:b"); // namespace "worker:b"
-const metadata = { from: "Worker B", time: Date.now() };
-loggerWorkerB.info(metadata);
-// [2019-10-06T13:04:54.027Z] worker:b INFO { from: 'Worker B', time: 1570367094027 } +0ms
-loggerWorkerB.verbose("This will not be logged because the max log level is info");
-
-
-// File worker-c.js
-const loggerWorkerC = createNamespace("worker:c"); // namespace "worker:c"
-loggerWorkerC.error("Worker C encountered an error", new Error("ERR!"));
-// [2019-10-06T13:04:54.028Z] worker:c ERROR Worker C encountered an error Error: ERR!
-//     at Object.<anonymous> (/Users/ales.menzel/dev/churchill/examples/console.js:33:54)
-//     at Module._compile (internal/modules/cjs/loader.js:776:30)
-//     at Object.Module._extensions..js (internal/modules/cjs/loader.js:787:10)
-//     at Module.load (internal/modules/cjs/loader.js:653:32)
-//     at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
-//     at Function.Module._load (internal/modules/cjs/loader.js:585:3)
-//     at Function.Module.runMain (internal/modules/cjs/loader.js:829:12)
-//     at startup (internal/bootstrap/node.js:283:19)
-//     at bootstrapNodeJSCore (internal/bootstrap/node.js:622:3) +0ms
+// worker-a.js
+const logger = require('./logger')('worker:a')
+logger.error('Got an error!', new Error('Err!'))
+logger.warn('Ups?')
+logger.info('Log me with some data!', { here: { are: 'some metadata' }})
+// the default max log level is info (anything below will not be logged by default)
+logger.verbose('Hello!')
+logger.debug( ... )
+logger.silly( ... )
 ```
 
 The default log levels contiain 6 levels, that are ascending numerical values, where the lower the number the more important the log message is.
 
 ```js
-const levels = {
+const LEVELS = {
   error: 0,
   warn: 1,
   info: 2, // Default maximum log level
@@ -120,51 +80,60 @@ const levels = {
 
 ## Transports
 
-This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage.
+This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage. (Note that all transports are exported under `churchill.trasports.<Transport>`)
 
-| Name                | Description                               | Example                                                                           |
-| ------------------- | ----------------------------------------- | --------------------------------------------------------------------------------- |
-| [Console](#console) | Log to console                            | `churchill.trasports.Console.create({ ... })`                                     |
-| [File](#file)       | Log to a file                             | `churchill.trasports.File.create({ filename: "error.log", level: "error", ... })` |
-| [Stream](#stream)   | Log to any arbitrary stream.              | `churchill.transports.Stream.create({ stream: <Stream> })`                        |
-| [HTTP](#http)       | Log to a HTTP stream.                     | `churchill.transports.HTTP.create({ path: "https://domain.com/path" })`           |
-| [Socket](#socket)\* | (\*`Not Implemented Yet`) Log to a socket | `churchill.transports.Socket.create({ host: "127.0.0.1", port: 1337, ... })`      |
+| Name                  | Description                               | Example                                                                 |
+| --------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| [Console](#console)   | Log to console                            | `Console.create({ ... })`                                               |
+| [File](#file)         | Log to a file                             | `File.create({ filename: "error.log", level: "error", ... })`           |
+| [Stream](#stream)     | Log to any arbitrary stream.              | `Stream.create({ stream: <Stream> })`                                   |
+| [HTTP](#http)         | Log to a HTTP stream.                     | `HTTP.create({ path: "https://domain.com/path" })`                      |
+| [Elastic](#elastic)\* | Log to an elasticsearch index.            | `Elastic.create({ node: "http://localhost:9200", index: "logs", ... })` |
+| [Socket](#socket)\*   | (\*`Not Implemented Yet`) Log to a socket | `Socket.create({ host: "127.0.0.1", port: 1337, ... })`                 |
 
 ### Console
 
 Options:
 
-| Option       | Description                       | Example                   |
-| ------------ | --------------------------------- | ------------------------- |
-| `errorLevel` | Max log level to stream to stderr | `{ errorLevel: "error" }` |
+| Option       | Description                           | Example                                  |
+| ------------ | ------------------------------------- | ---------------------------------------- |
+| `errorLevel` | Max log level to stream to stderr     | `{ errorLevel: "error" }`                |
+| `format`     | Custom formatting function.           | `{ format: (info, out, logger) => ... }` |
+| `maxLevel`   | Max level to log into this transport. | `{ maxLevel: "warn" }`                   |
 
 ### File
 
 Options:
 
-| Option     | Description          | Example                     |
-| ---------- | -------------------- | --------------------------- |
-| `filename` | Filename to log into | `{ filename: "error.log" }` |
+| Option     | Description                           | Example                                  |
+| ---------- | ------------------------------------- | ---------------------------------------- |
+| `filename` | Filename to log into                  | `{ filename: "error.log" }`              |
+| `format`   | Custom formatting function.           | `{ format: (info, out, logger) => ... }` |
+| `maxLevel` | Max level to log into this transport. | `{ maxLevel: "warn" }`                   |
 
 ### Stream
 
 Options:
 
-| Option   | Description        | Example                                               |
-| -------- | ------------------ | ----------------------------------------------------- |
-| `stream` | Stream to log into | `{ stream: fs.createWriteStream("temp/stream.log") }` |
+| Option     | Description                           | Example                                               |
+| ---------- | ------------------------------------- | ----------------------------------------------------- |
+| `stream`   | Stream to log into                    | `{ stream: fs.createWriteStream("temp/stream.log") }` |
+| `format`   | Custom formatting function.           | `{ format: (info, out, logger) => ... }`              |
+| `maxLevel` | Max level to log into this transport. | `{ maxLevel: "warn" }`                                |
 
 ### HTTP
 
 Options:
 
-| Option    | Description                                                                                                                                                  | Example                                               |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| `method`  | HTTP method                                                                                                                                                  | `{ method: "POST" }`                                  |
-| `url`     | URL                                                                                                                                                          | `{ url: "https://log.example.com" }`                  |
-| `auth`    | Authentication, see [auth request options](https://www.npmjs.com/package/request#requestoptions-callback)                                                    | `{ auth: { username: "john", password: "xxxxx" } }`   |
-| `headers` | HTTP headers                                                                                                                                                 | `{ headers: { "Content-Type": "application/json" } }` |
-| `dataKey` | How to send the data (e.g. body, qs, json, form, formData). This will use the request appropriate body key, which sets required headers. Defaults to `json`. | `{ dataKey: "form" }`                                 |
+| Option     | Description                                                                                                                                                  | Example                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `method`   | HTTP method                                                                                                                                                  | `{ method: "POST" }`                                  |
+| `url`      | URL                                                                                                                                                          | `{ url: "https://log.example.com" }`                  |
+| `auth`     | Authentication, see [auth request options](https://www.npmjs.com/package/request#requestoptions-callback)                                                    | `{ auth: { username: "john", password: "xxxxx" } }`   |
+| `headers`  | HTTP headers                                                                                                                                                 | `{ headers: { "Content-Type": "application/json" } }` |
+| `dataKey`  | How to send the data (e.g. body, qs, json, form, formData). This will use the request appropriate body key, which sets required headers. Defaults to `json`. | `{ dataKey: "form" }`                                 |
+| `format`   | Custom formatting function.                                                                                                                                  | `{ format: (info, out, logger) => ... }`              |
+| `maxLevel` | Max level to log into this transport.                                                                                                                        | `{ maxLevel: "warn" }`                                |
 
 ### Socket
 
@@ -204,19 +173,19 @@ Churchill supports custom formatting functions. A formatting function accepts `i
 const util = require("util");
 
 const customGlobalFormat = (info) => {
-  return { ...info, logger: 'churchill' }
+  return { ...info, logger: 'churchill:' }
 }
 
 const customFormat = info => {
-  const { namespace, timestamp, level, ms, args } = info;
+  const { logger, namespace, timestamp, level, ms, args } = info;
 
-  return `${namespace} ${level} ${util.format(...args)} +${ms}ms`;
+  return `${logger}${namespace} ${level} ${args.map(arg => util.format(arg)).join(' ')} +${ms}ms`;
 };
 
 const createLogger = churchill({
   format: customGlobalFormat,
   transports: [
-    churchill.trasports.Console.create({ format: customFormat })
+    Console.create({ format: customFormat })
   ]
 });
 
@@ -225,11 +194,11 @@ const loggerB = createLogger("worker:b");
 const loggerC = createLogger("worker:c");
 
 loggerA.info("test", { metadata: "some info" });
-// worker:a info test { metadata: 'some info' } +1ms
+// churchill:worker:a info test { metadata: 'some info' } +1ms
 loggerB.info("test", { metadata: "some info" });
-// worker:b info test { metadata: 'some info' } +0ms
+// churchill:worker:b info test { metadata: 'some info' } +0ms
 loggerC.error("test", { metadata: "some info" });
-// worker:c error test { metadata: 'some info' } +0ms
+// churchill:worker:c error test { metadata: 'some info' } +0ms
 ```
 
 ### Custom transport
@@ -254,7 +223,7 @@ class CustomTransport extends Transport {
    * @param {*} [output] Output of the global formatting function
    * @param {Logger} logger Logger
    */
-  log(info, output, logger) {
+  async log(info, output, logger) {
     const out =  this.format(info, output, logger)
     const prefixed = custom ? `${this.prefix}${out}` : out
     // Transport is also an EventEmitter, so you can emit events
@@ -280,7 +249,7 @@ You can change the funcionality of the logger by setting enviromental variables.
 | Variable                | Description                                                                                        |
 | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | `CHURCHILL_DEBUG`       | List of enabled namespaces separated by a comma, can be also used with wildcard (i.e. `worker:a*`) |
-| `CHURCHILL_DEBUG_LEVEL` | Maximal level to log (i.e. `warn`)                                                                 |
+| `CHURCHILL_DEBUG_LEVEL` | Max. level to log (i.e. `debug`)                                                                   |
 
 ## Logging Uncaught Exceptions
 
@@ -291,18 +260,6 @@ process.on("uncaughtException", err => {
   logger.error(err);
   // Note: if you use any asynchronous transport, you will need to wait till it is written before exiting the program
 });
-
-throw new Error("ERR!");
-// [2018-08-02T21:07:51.549Z] ERROR Error: ERR!
-//    at Object.<anonymous> (<path>:30:7)
-//    at Module._compile (internal/modules/cjs/loader.js:689:30)
-//    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
-//    at Module.load (internal/modules/cjs/loader.js:599:32)
-//    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
-//    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
-//    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
-//    at startup (internal/bootstrap/node.js:266:19)
-//    at bootstrapNodeJSCore (internal/bootstrap/node.js:596:3) +0ms
 ```
 
 ## Contributors
