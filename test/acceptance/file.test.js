@@ -25,8 +25,7 @@ describe("file", () => {
   });
 
   describe("options: filename", () => {
-    xit("logs to a file", async () => {
-      // TODO: This crashes on 'Maximum call stack size exceeded'
+    it("logs to a file", async () => {
       const file = File.create({ filename: FILEPATH });
       const createNamespace = churchill({
         transports: [file]
