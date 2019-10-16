@@ -27,12 +27,12 @@ const COLORS = {
   [SILLY]: "white"
 };
 
-const DEBUG_SEPARATOR = /[\s,]+/;
+const SEPARATOR = /[\s,]+/;
 
 // Create a list of RegExp matches to test against for namespaces
-let DEBUG_NAMESPACES;
+let CHURCHILL_DEBUG_NAMESPACES;
 if (CHURCHILL_DEBUG !== undefined) {
-  DEBUG_NAMESPACES = CHURCHILL_DEBUG.split(DEBUG_SEPARATOR).reduce((acc, namespace) => {
+  CHURCHILL_DEBUG_NAMESPACES = CHURCHILL_DEBUG.split(SEPARATOR).reduce((acc, namespace) => {
     if (!namespace) return acc;
     const regex = new RegExp(`^${namespace.replace(/\*/g, ".*?")}$`);
     acc.push(regex);
@@ -49,8 +49,7 @@ module.exports = {
   COLORS,
   CHURCHILL_DEBUG,
   CHURCHILL_DEBUG_LEVEL,
-  DEBUG_SEPARATOR,
-  DEBUG_NAMESPACES,
+  CHURCHILL_DEBUG_NAMESPACES,
   E_BACKPRESSURE,
   E_NOT_IMPLEMENTED,
   ERROR,
