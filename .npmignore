@@ -114,3 +114,6 @@ TODO.md
 
 # Jest mocks
 __mocks__
+
+# travis configuration
+.travis.yml
