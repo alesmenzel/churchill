@@ -40,7 +40,7 @@ with the default formatting, you can use the logger in your services.
 // logger.js
 const churchill = require("churchill");
 
-const { Console, File } = churchill.trasports
+const { Console, File } = churchill.trasports;
 
 const createNamespace = churchill({
   transports: [
@@ -93,6 +93,10 @@ This is the list of currently supported transports. Check the [examples](./examp
 
 ### Console
 
+Log to a terminal. Uses chalk to colorize the output. By setting the `errorLevel` you can change which levels are logged to the standard error (stderr) instead of standard output (stdout). Usually best for local development.
+
+![console](./assets/example-console.png)
+
 Options:
 
 | Option       | Description                           | Example                                  |
@@ -102,6 +106,10 @@ Options:
 | `maxLevel`   | Max level to log into this transport. | `{ maxLevel: "warn" }`                   |
 
 ### File
+
+Log to a file on the same machine. You must specify a `filename` where to store the logs. Note that the folder must exists before hand.
+
+![file](./assets/example-file.png)
 
 Options:
 
@@ -113,6 +121,8 @@ Options:
 
 ### Stream
 
+Log to any arbitrary stream.
+
 Options:
 
 | Option     | Description                           | Example                                               |
@@ -122,6 +132,8 @@ Options:
 | `maxLevel` | Max level to log into this transport. | `{ maxLevel: "warn" }`                                |
 
 ### HTTP
+
+Log to a http endpoint.
 
 Options:
 
@@ -154,10 +166,10 @@ const customLevels = {
 };
 
 const customColors = {
-  critical: 'red',
-  warning: 'orange',
-  log: 'blue',
-  debug: 'gray'
+  critical: "red",
+  warning: "orange",
+  log: "blue",
+  debug: "gray"
 };
 
 churchill({ levels: customLevels, colors: customColors });
@@ -172,21 +184,19 @@ Churchill supports custom formatting functions. A formatting function accepts `i
 ```js
 const util = require("util");
 
-const customGlobalFormat = (info) => {
-  return { ...info, logger: 'churchill:' }
-}
+const customGlobalFormat = info => {
+  return { ...info, logger: "churchill:" };
+};
 
 const customFormat = info => {
   const { logger, namespace, timestamp, level, ms, args } = info;
 
-  return `${logger}${namespace} ${level} ${args.map(arg => util.format(arg)).join(' ')} +${ms}ms`;
+  return `${logger}${namespace} ${level} ${args.map(arg => util.format(arg)).join(" ")} +${ms}ms`;
 };
 
 const createLogger = churchill({
   format: customGlobalFormat,
-  transports: [
-    Console.create({ format: customFormat })
-  ]
+  transports: [Console.create({ format: customFormat })]
 });
 
 const loggerA = createLogger("worker:a");
@@ -206,15 +216,15 @@ loggerC.error("test", { metadata: "some info" });
 A transport is a class with a log method. Log method arguments are `info`, `output` and `logger`, where info is the object with logged message, output is formatted message by the global format function and logger is the instance that logged the message. See [implementation](./src/transports) of transports for examples.
 
 ```js
-const { Transport } = require('@alesmenzel/churchill')
+const { Transport } = require("@alesmenzel/churchill");
 
 // Here is a simple transport that logs to stdout and has option to provide a prefix
 // Note: it does not correcly handle stream backpressure
 class CustomTransport extends Transport {
   constructor(opts) {
     super(opts);
-    const { prefix = "" } = opts
-    this.prefix = prefix
+    const { prefix = "" } = opts;
+    this.prefix = prefix;
   }
 
   /**
@@ -224,20 +234,20 @@ class CustomTransport extends Transport {
    * @param {Logger} logger Logger
    */
   async log(info, output, logger) {
-    const out =  this.format(info, output, logger)
-    const prefixed = custom ? `${this.prefix}${out}` : out
+    const out = this.format(info, output, logger);
+    const prefixed = custom ? `${this.prefix}${out}` : out;
     // Transport is also an EventEmitter, so you can emit events
     if (custom) {
-      this.emit("some-event", info)
+      this.emit("some-event", info);
     }
     process.stdout.write(prefixed); // naively log to console
   }
 }
 
 // It is recommented to provide a factory to create your logger
-CustomTransport.create = (opts) => {
-  return new CustomTransport(opts)
-}
+CustomTransport.create = opts => {
+  return new CustomTransport(opts);
+};
 
 module.exports = CustomTransport;
 ```
@@ -270,6 +280,7 @@ Help us improve and be recognised!
 <!-- prettier-ignore -->
 | [<img src="https://avatars3.githubusercontent.com/u/8976542?v=4" width="100px;"/><br /><sub><b>Aleš Menzel</b></sub>](https://github.com/alesmenzel)<br />[💻](https://github.com/alesmenzel/churchill/commits?author=alesmenzel "Code") [📖](https://github.com/alesmenzel/churchill/commits?author=alesmenzel "Documentation") |
 | :---: |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- ALL-CONTRIBUTORS-LIST: START - Do not remove or modify this section -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
