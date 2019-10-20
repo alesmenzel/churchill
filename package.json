@@ -1,6 +1,6 @@
 {
-  "name": "churchill",
-  "version": "1.0.0-alpha.1",
+  "name": "@alesmenzel/churchill",
+  "version": "1.0.0-beta.1",
   "description": "Node logging utility",
   "keywords": [
     "logger",
