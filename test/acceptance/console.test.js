@@ -21,7 +21,6 @@ describe("console", () => {
       const spyStderr = jest.spyOn(process.stderr, "write");
       await logger.warn("{LOG}", { data: "12345" });
 
-      // TODO: why does this not requre any escape sequence (?)
       expect(spyStdout.mock.calls).toEqual([
         [`[90m[${DATE}][39m [1m[38;2;54;51;255m{NAMESPACE}[39m[22m [1m[33mWARN[39m[22m [90m{LOG} { data: '12345' }[39m [1m[38;2;54;51;255m+0ms[39m[22m\n`]
       ]);
@@ -38,9 +37,8 @@ describe("console", () => {
       await logger.warn("{LOG}", { data: "12345" });
 
       expect(spyStdout.mock.calls).toEqual([]);
-      // TODO: why doesnt this work with escape sequence, except the first one (\u001b) (?)
       expect(spyStderr.mock.calls).toEqual([
-        [`\u001b[90m[${DATE}][39m [1m[38;2;54;51;255m{NAMESPACE}[39m[22m [1m[33mWARN[39m[22m [90m{LOG} { data: '12345' }[39m [1m[38;2;54;51;255m+0ms[39m[22m\n`]
+        [`[90m[${DATE}][39m [1m[38;2;54;51;255m{NAMESPACE}[39m[22m [1m[33mWARN[39m[22m [90m{LOG} { data: '12345' }[39m [1m[38;2;54;51;255m+0ms[39m[22m\n`]
       ]);
     });
   });
