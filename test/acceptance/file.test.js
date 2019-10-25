@@ -25,7 +25,8 @@ describe("file", () => {
   });
 
   describe("options: filename", () => {
-    xit("logs to a file", async () => {
+    // TODO: enable the test when jest is patched with gracefull-fs
+    it("logs to a file", async () => {
       const file = File.create({ filename: FILEPATH });
       const createNamespace = churchill({
         transports: [file]
