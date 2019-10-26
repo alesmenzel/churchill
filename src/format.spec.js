@@ -3,9 +3,11 @@ const Logger = require("./logger");
 const format = require("./format");
 const { DATE, TIMESTAMP } = require("../test/mocks/date.mock");
 
+jest.mock("supports-color");
+
 describe("format", () => {
   describe("toTerminal", () => {
-    xit("log message as a colorized text", () => {
+    it("log message as a colorized text", () => {
       const info = {
         namespace: "namespace:a",
         level: "info",
@@ -16,7 +18,7 @@ describe("format", () => {
       const output = "sample output";
       const logger = Logger.createLogger();
       expect(format.toTerminal(info, output, logger)).toBe(
-        `\u001B[90m[${DATE}]\u001B[39m \u001B[1m[38;2;255;51;129mnamespace:a\u001B[39m\u001B[22m \u001B[1m\u001B[34mINFO\u001B[39m\u001B[22m \u001B[90m{ some: 'data' }\u001B[39m \u001B[1m[38;2;255;51;129m+235ms\u001B[39m\u001B[22m\n`
+        `[90m[${DATE}][39m [1m[38;2;255;51;129mnamespace:a[39m[22m [1m[34mINFO[39m[22m [90m{ some: 'data' }[39m [1m[38;2;255;51;129m+235ms[39m[22m\n`
       );
     });
   });

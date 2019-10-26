@@ -25,16 +25,16 @@ describe("churchill", () => {
     expect(typeof churchill.Transport).toBe("function");
   });
 
-  it("LEVELS is exported", () => {
+  it("LEVELS are exported", () => {
     expect(typeof churchill.LEVELS).toBe("object");
   });
 
-  it("COLORS is exported", () => {
+  it("COLORS are exported", () => {
     expect(typeof churchill.COLORS).toBe("object");
   });
 
   ["ERROR", "WARN", "INFO", "VERBOSE", "DEBUG", "SILLY"].forEach(LEVEL => {
-    it("COLORS is exported", () => {
+    it(`Default level '${LEVEL}' is exported`, () => {
       expect(typeof churchill[LEVEL]).toBe("string");
     });
   });

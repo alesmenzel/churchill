@@ -20,11 +20,17 @@ function isset(value) {
 
 /**
  * Check if namespace is enabled
- * @param {String} input Namespace
+ * @param {string} input Namespace
+ * @param {?string} debug Debug
+ * @param {?RegExp[]} namespaces Namespaces
  */
-function isNamespaceEnabled(input) {
-  if (!isset(CHURCHILL_DEBUG)) return true;
-  return CHURCHILL_DEBUG_NAMESPACES.some(namespace => input.match(namespace));
+function isNamespaceEnabled(
+  input,
+  debug = CHURCHILL_DEBUG,
+  namespaces = CHURCHILL_DEBUG_NAMESPACES
+) {
+  if (!isset(debug)) return true;
+  return namespaces.some(namespace => input.match(namespace));
 }
 
 /**

@@ -1,14 +1,12 @@
+/* eslint-disable global-require */
 const {
   identity,
   isset,
-  isNamespaceEnabled,
   md5,
   HSVtoRGB,
-  randomStableColor
+  randomStableColor,
+  isNamespaceEnabled
 } = require("./utils");
-const config = require("./config");
-
-jest.mock("./config", () => ({}));
 
 describe("identity", () => {
   it("return the same value", () => {
@@ -35,23 +33,22 @@ describe("isset", () => {
 });
 
 describe("isNamespaceEnabled", () => {
-  afterEach(() => {
-    // TODO: this does not seem to restore the module mock
-    jest.restoreAllMocks();
+  it("return true when enabled", () => {
+    const CHURCHILL_DEBUG = "namespace:a*,namespace:b";
+    // @ts-ignore
+    const CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
+    expect(isNamespaceEnabled("namespace:a", CHURCHILL_DEBUG, CHURCHILL_DEBUG_NAMESPACES)).toBe(
+      true
+    );
   });
 
-  xit("return true when enabled", () => {
-    // TODO: figure out a way to mock the config module
-    config.CHURCHILL_DEBUG = "namespace:a*,namespace:b";
-    config.CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
-    expect(isNamespaceEnabled("namespace:a")).toBe(true);
-  });
-
-  xit("return false when not enabled", () => {
-    // TODO: figure out a way to mock the config module
-    config.CHURCHILL_DEBUG = "namespace:a*,namespace:b";
-    config.CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
-    expect(isNamespaceEnabled("namespace:b:one")).toBe(false);
+  it("return false when not enabled", () => {
+    const CHURCHILL_DEBUG = "namespace:a*,namespace:b";
+    // @ts-ignore
+    const CHURCHILL_DEBUG_NAMESPACES = [/^namespace:a.*?$/, /^namespace:b$/];
+    expect(isNamespaceEnabled("namespace:b:one", CHURCHILL_DEBUG, CHURCHILL_DEBUG_NAMESPACES)).toBe(
+      false
+    );
   });
 });
 
