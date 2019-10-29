@@ -21,6 +21,7 @@ npm install @alesmenzel/churchill
     - [File](#file)
     - [Stream](#stream)
     - [HTTP](#http)
+  - [Elastic](#elastic)
     - [Socket](#socket)
   - [Customization](#customization)
     - [Custom Log Levels](#custom-log-levels)
@@ -146,6 +147,22 @@ Options:
 | `dataKey`  | How to send the data (e.g. body, qs, json, form, formData). This will use the request appropriate body key, which sets required headers. Defaults to `json`. | `{ dataKey: "form" }`                                 |
 | `format`   | Custom formatting function.                                                                                                                                  | `{ format: (info, out, logger) => ... }`              |
 | `maxLevel` | Max level to log into this transport.                                                                                                                        | `{ maxLevel: "warn" }`                                |
+
+## Elastic
+
+In order to log to elastic, first install the elasticsearch library.
+
+```bash
+npm i @elastic/elasticsearch@7.x
+```
+
+| Option     | Description                                      | Example                                  |
+| ---------- | ------------------------------------------------ | ---------------------------------------- |
+| `client`   | Elasticsearch client (or just pass a `node` URL) | `new Client({ node: "..." })`            |
+| `node`     | Elasticsearch node URL                           | `{ node: "http://localhost:9200" }`      |
+| `index`    | Index where to store logs.                       | `churchill-log`                          |
+| `format`   | Custom formatting function.                      | `{ format: (info, out, logger) => ... }` |
+| `maxLevel` | Max level to log into this transport.            | `{ maxLevel: "warn" }`                   |
 
 ### Socket
 
