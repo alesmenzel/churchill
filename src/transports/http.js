@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const request = require("request-promise-native");
 
 const Transport = require("../transport");
