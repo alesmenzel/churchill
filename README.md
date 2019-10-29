@@ -134,7 +134,11 @@ Options:
 
 ### HTTP
 
-Log to a http endpoint.
+Log to a http endpoint. You must install `request` and `request-promise-native`.
+
+```bash
+npm i request request-promise-native
+```
 
 Options:
 
