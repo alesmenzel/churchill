@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 
 const options = {
-  key: fs.readFileSync(path.join(__dirname, "keys/server-key.pem")),
-  cert: fs.readFileSync(path.join(__dirname, "keys/server-crt.pem"))
+  key: fs.readFileSync(path.join(__dirname, "../../keys/server-key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "../../keys/server-crt.pem"))
 };
 
 const PORT = 5000;

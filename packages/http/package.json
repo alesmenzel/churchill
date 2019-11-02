@@ -1,0 +1,27 @@
+{
+  "name": "@churchill/http",
+  "version": "0.1.0",
+  "description": "Churchill http transport",
+  "main": "http.js",
+  "keywords": [
+    "churchill",
+    "http",
+    "request",
+    "logger"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/transport": "^0.1.0"
+  },
+  "devDependencies": {
+    "@churchill/core": "^0.1.0",
+    "@churchill/utils": "^0.1.0",
+    "request": "^2.0.0",
+    "request-promise-native": "^1.0.0"
+  },
+  "peerDependencies": {
+    "request": "^2.0.0",
+    "request-promise-native": "^1.0.0"
+  }
+}
