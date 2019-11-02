@@ -1,0 +1,16 @@
+{
+  "name": "@churchill/core",
+  "version": "1.0.0-rc.2",
+  "description": "Churchill logger core functionality",
+  "main": "churchill.js",
+  "keywords": [
+    "churchill",
+    "logger"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/console": "^1.0.0-rc.2",
+    "@churchill/utils": "^1.0.0-rc.2"
+  }
+}

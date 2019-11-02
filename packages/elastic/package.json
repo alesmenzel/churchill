@@ -1,0 +1,25 @@
+{
+  "name": "@churchill/elastic",
+  "version": "1.0.0-rc.2",
+  "description": "Churchill elastic transport",
+  "main": "elastic.js",
+  "keywords": [
+    "churchill",
+    "transport",
+    "elastic",
+    "kibana"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/transport": "^1.0.0-rc.2",
+    "@churchill/utils": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@churchill/core": "^1.0.0-rc.2",
+    "@elastic/elasticsearch": "^7.0.0"
+  },
+  "peerDependencies": {
+    "@elastic/elasticsearch": "^7.0.0"
+  }
+}

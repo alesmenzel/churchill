@@ -1,0 +1,22 @@
+{
+  "name": "@churchill/console",
+  "version": "1.0.0-rc.2",
+  "description": "Churchill console transport",
+  "main": "console.js",
+  "keywords": [
+    "churchill",
+    "transport",
+    "console",
+    "terminal"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/transport": "^1.0.0-rc.2",
+    "@churchill/utils": "^1.0.0-rc.2",
+    "chalk": "^2.0.0"
+  },
+  "devDependencies": {
+    "@churchill/core": "^1.0.0-rc.2"
+  }
+}

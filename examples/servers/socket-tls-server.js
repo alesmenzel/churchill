@@ -12,9 +12,9 @@ const fs = require("fs");
  */
 
 const options = {
-  key: fs.readFileSync(path.join(__dirname, "keys/server-key.pem")),
-  cert: fs.readFileSync(path.join(__dirname, "keys/server-crt.pem")),
-  ca: fs.readFileSync(path.join(__dirname, "keys/ca-crt.pem")),
+  key: fs.readFileSync(path.join(__dirname, "../../keys/server-key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "../../keys/server-crt.pem")),
+  ca: fs.readFileSync(path.join(__dirname, "../../keys/ca-crt.pem")),
   requestCert: true,
   rejectUnauthorized: true
 };

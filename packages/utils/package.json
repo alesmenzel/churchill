@@ -1,0 +1,12 @@
+{
+  "name": "@churchill/utils",
+  "version": "1.0.0-rc.2",
+  "description": "Churchill utility functions",
+  "main": "index.js",
+  "keywords": [
+    "churchill",
+    "utility"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@churchill/transport",
+  "version": "1.0.0-rc.2",
+  "description": "Churchill transport base class",
+  "main": "transport.js",
+  "keywords": [
+    "churchill",
+    "transport",
+    "logger"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/utils": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@churchill/core": "^1.0.0-rc.2"
+  }
+}
