@@ -9,7 +9,7 @@ npm install @churchill/core
 # or if you want to log to different transport then the default
 npm install @churchill/core @churchill/console
 npm install @churchill/core @churchill/file
-npm install @churchill/core @churchill/elastic
+npm install @churchill/core @churchill/elastic @elastic/elasticsearch
 # ...
 ```
 
@@ -64,14 +64,14 @@ const LEVELS = {
 
 This is the list of currently supported transports. Check the [examples](./examples) folder to see their usage. (Note that all transports are exported under `churchill.trasports.<Transport>`)
 
-| Name                    | Description                               | Example                                                                 |
-| ----------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
-| [Console](../console)   | Log to console                            | `Console.create({ errorLevel: "error", ... })`                          |
-| [File](../file)         | Log to a file                             | `File.create({ filename: "error.log", level: "error", ... })`           |
-| [Stream](../stream)     | Log to any arbitrary stream.              | `Stream.create({ stream: <Stream>, ... })`                              |
-| [HTTP](../http)         | Log to a HTTP stream.                     | `HTTP.create({ path: "https://domain.com/path", ... })`                 |
-| [Elastic](../elastic)\* | Log to an elasticsearch index.            | `Elastic.create({ node: "http://localhost:9200", index: "logs", ... })` |
-| [Socket](../socket)\*   | (\*`Not Implemented Yet`) Log to a socket | `Socket.create({ host: "127.0.0.1", port: 1337, ... })`                 |
+| Name                  | Description                               | Example                                                                 |
+| --------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| [Console](../console) | Log to console                            | `Console.create({ errorLevel: "error", ... })`                          |
+| [File](../file)       | Log to a file                             | `File.create({ filename: "error.log", level: "error", ... })`           |
+| [Stream](../stream)   | Log to any arbitrary stream.              | `Stream.create({ stream: <Stream>, ... })`                              |
+| [HTTP](../http)       | Log to a HTTP stream.                     | `HTTP.create({ path: "https://domain.com/path", ... })`                 |
+| [Elastic](../elastic) | Log to an elasticsearch index.            | `Elastic.create({ node: "http://localhost:9200", index: "logs", ... })` |
+| [Socket](../socket)\* | (\*`Not Implemented Yet`) Log to a socket | `Socket.create({ host: "127.0.0.1", port: 1337, ... })`                 |
 
 ## Customization
 
