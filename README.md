@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="75px" height="75px" src="./assets/logo.png" alt="Churchill's logo"/>
+</p>
+
 # Churchill
 
 Light and simple to use logger for Node. Inspired by [winston](https://github.com/winstonjs/winston) and [debug](https://github.com/visionmedia/debug).
