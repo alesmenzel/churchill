@@ -9,7 +9,12 @@
     "lint": "eslint ./packages",
     "format": "eslint --fix ./packages",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "version:patch": "lerna version patch",
+    "version:minor": "lerna version minor",
+    "version:major": "lerna version major",
+    "publish": "lerna publish from-git",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
