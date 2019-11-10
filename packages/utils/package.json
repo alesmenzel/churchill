@@ -1,6 +1,6 @@
 {
   "name": "@churchill/utils",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "description": "Churchill utility functions",
   "main": "index.js",
   "keywords": [
