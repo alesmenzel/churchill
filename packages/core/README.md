@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="75px" height="75px" src="../../assets/logo.png" alt="Churchill's logo"/>
+</p>
+
 # Churchill Core
 
 Churchill core is the actuall logger. By default we include `@churchill/console` as the default transport, but you might want to install additional transports like `file`, `elastic`, `http` or `socket`.
