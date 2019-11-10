@@ -1,0 +1,24 @@
+{
+  "name": "@churchill/examples",
+  "private": true,
+  "description": "Churchill logger examples",
+  "main": "file.js",
+  "keywords": [
+    "churchill",
+    "logger",
+    "example",
+    "sample"
+  ],
+  "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "dependencies": {
+    "@churchill/transport": "^1.0.0-rc.4",
+    "@churchill/utils": "^1.0.0-rc.4",
+    "@churchill/core": "^1.0.0-rc.4",
+    "@churchill/console": "^1.0.0-rc.4",
+    "@churchill/elastic": "^1.0.0-rc.4",
+    "@churchill/file": "^1.0.0-rc.4",
+    "@churchill/http": "^1.0.0-rc.4",
+    "@churchill/stream": "^1.0.0-rc.4"
+  }
+}
