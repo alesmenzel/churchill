@@ -1,6 +1,6 @@
 {
   "name": "@churchill/file",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Churchill file transport",
   "main": "file.js",
   "keywords": [
@@ -11,10 +11,10 @@
   "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
   "license": "MIT",
   "dependencies": {
-    "@churchill/transport": "^1.0.0-rc.0",
-    "@churchill/utils": "^1.0.0-rc.0"
+    "@churchill/transport": "^1.0.0-rc.1",
+    "@churchill/utils": "^1.0.0-rc.1"
   },
   "devDependencies": {
-    "@churchill/core": "^1.0.0-rc.0"
+    "@churchill/core": "^1.0.0-rc.1"
   }
 }
