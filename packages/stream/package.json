@@ -1,6 +1,6 @@
 {
   "name": "@churchill/stream",
-  "version": "0.1.0",
+  "version": "1.0.0-rc.0",
   "description": "Churchill stream transport",
   "main": "stream.js",
   "keywords": [
@@ -11,10 +11,10 @@
   "author": "Ales Menzel <alesmenzel@gmail.com> (https://github.com/alesmenzel)",
   "license": "MIT",
   "dependencies": {
-    "@churchill/utils": "^0.1.0",
-    "@churchill/transport": "^0.1.0"
+    "@churchill/transport": "^1.0.0-rc.0",
+    "@churchill/utils": "^1.0.0-rc.0"
   },
   "devDependencies": {
-    "@churchill/core": "^0.1.0"
+    "@churchill/core": "^1.0.0-rc.0"
   }
 }
